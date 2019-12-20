@@ -1,0 +1,21 @@
+{
+  "name": "repository",
+  "version": "1.0.0",
+  "dependencies": {},
+  "devDependencies": {
+    "gh-pages": "^2.1.1"
+  },
+  "scripts": {
+    "deploy": "gh-pages --dist public --branch gh-pages --message 'Repository update'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/docker-suite/repository.git"
+  },
+  "author": "hexosse",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/docker-suite/repository/issues"
+  },
+  "homepage": "https://github.com/docker-suite/repository#readme"
+}

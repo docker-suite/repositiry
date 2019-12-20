@@ -1,0 +1,10 @@
+
+**/*.rsa.priv
+**/*.rsa.pub
+
+node_modules/
+
+**/config
+**/packages/**/pkg
+**/packages/**/src
+**/public
