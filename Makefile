@@ -2,7 +2,7 @@
 DIR:=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
 
 ## Define the default version to package
-default = 3.7
+default = 3.10
 
 ##
 .DEFAULT_GOAL := package
@@ -71,4 +71,14 @@ shell: ## Get a command prompt inside the container
 	@$(MAKE) run v=$(version) c=bash
 
 deploy: ## Deploy built packages to gh-pages
-	npm run deploy
+	@# -- check if token is defined
+	@test "$(token)"
+	@# -- publish packages to gh-pages
+	@docker run -it --rm \
+		-e http_proxy=${http_proxy} \
+		-e https_proxy=${https_proxy} \
+		-e GH_TOKEN=$(token) \
+		-v $(DIR)/public:/public \
+		-v $(DIR)/package.json:/package.json \
+		-w / \
+		dsuite/alpine-nodejs:lts bash -c "apk add git && npm install && npm run deploy"
