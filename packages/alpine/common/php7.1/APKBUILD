@@ -1,0 +1,622 @@
+# Maintainer: Hexosse <hexosse@gmail.com>
+
+pkgname=php7.1
+pkgver=7.1.33
+pkgrel=0
+_pkgreal=php
+_phpver=7.1
+_apiver=20160303
+_default_php="yes"
+
+pkgdesc="The PHP $_phpver language runtime engine"
+url="http://www.php.net/"
+arch="all"
+license="PHP-3 BSD LGPL2 MIT Zend"
+
+depends="$pkgname-common"
+depends_dev="$pkgname=$pkgver-r$pkgrel autoconf pcre-dev"
+_depends_mysqlnd="$pkgname-openssl"
+_depends_pdo_mysql="$pkgname-pdo $pkgname-mysqlnd"
+_depends_phar="$pkgname"
+_depends_mysqli="$pkgname-mysqlnd $pkgname-openssl"
+makedepends="
+	autoconf apache2-dev aspell-dev	bison bzip2-dev curl-dev db-dev
+	enchant-dev freetds-dev file freetype-dev gd-dev gdbm-dev gettext-dev
+    gmp-dev icu-dev imap-dev krb5-dev libedit-dev libical-dev libjpeg-turbo-dev
+	libmcrypt-dev libpng-dev libressl-dev libwebp-dev libxml2-dev
+    libxpm-dev libxslt-dev libzip-dev net-snmp-dev openldap-dev pcre-dev
+	postgresql-dev re2c recode-dev sqlite-dev tidyhtml-dev unixodbc-dev
+	zlib-dev
+	"
+provides="$pkgname-cli $pkgname-zlib"
+source="https://php.net/distributions/php-$pkgver.tar.bz2
+	php${_phpver:0:1}-fpm.initd
+	php${_phpver:0:1}-fpm.logrotate
+    php${_phpver:0:1}-fpm.post-install
+    php${_phpver:0:1}-fpm.pre-install
+	php${_phpver:0:1}-module.conf
+	allow-build-recode-and-imap-together.patch
+	disabled-tests.list
+	fix-tests-devserver.patch
+	includedir.patch
+	install-pear.patch
+	php7-fpm-version-suffix.patch
+	"
+srcdir="/tmp/php-$pkgver"
+builddir="$srcdir/php-$pkgver"
+_libdir="/usr/lib/php/$_phpver"
+_extension_dir="$_libdir/modules"
+_extension_confd="/etc/php/$_phpver/conf.d"
+_extensions="
+	bcmath bz2 calendar ctype curl dba dom enchant exif fileinfo
+	ftp gd gettext gmp iconv imap intl json ldap mbstring mcrypt
+	mysqli mysqlnd odbc opcache openssl pcntl pdo pdo_dblib
+	pdo_mysql pdo_odbc pdo_pgsql pdo_sqlite pgsql phar posix
+	pspell recode session shmop simplexml snmp soap sockets
+	sqlite3 sysvmsg sysvsem sysvshm tidy tokenizer wddx
+	xml xmlreader xmlrpc xmlwriter xsl zip
+	"
+subpackages="$pkgname-dev $pkgname-doc $pkgname-apache2 $pkgname-phpdbg
+	$pkgname-embed $pkgname-litespeed $pkgname-cgi $pkgname-fpm
+	$pkgname-pear::noarch
+	"
+for _ext in $_extensions; do
+	case "$_ext" in
+		phar) subpackages="$subpackages $pkgname-$_ext:$_ext";;
+		*) subpackages="$subpackages $pkgname-$_ext:_extension";;
+	esac
+done
+subpackages="$subpackages $pkgname-common::noarch"
+
+case "$CARCH" in
+    x86_64) options="$options !check";;
+    s390x) options="$options !check";;
+    ppc64le) options="$options !check";;
+esac
+
+# secfixes:
+#   7.1.33-r0:
+#     - CVE-2019-11043
+#   7.1.32-r0:
+#     - CVE-2019-13224
+#     - CVE-2019-11042
+#     - CVE-2019-11041
+#   7.1.30-r0:
+#     - CVE-2019-11040
+#     - CVE-2019-11039
+#     - CVE-2019-11038
+#   7.1.29-r0:
+#     - CVE-2019-11034
+#     - CVE-2019-11035
+#     - CVE-2019-11036
+#     - CVE-2019-9637
+#     - CVE-2019-9638
+#     - CVE-2019-9639
+#     - CVE-2019-9640
+#     - CVE-2019-9641
+#     - CVE-2019-6977
+#     - CVE-2018-20783
+#     - CVE-2018-19935
+#     - CVE-2018-19518
+#     - CVE-2018-19396
+#     - CVE-2018-19395
+#     - CVE-2018-17082
+#     - CVE-2018-15132
+#     - CVE-2018-14884
+#     - CVE-2018-14883
+#     - CVE-2018-14851
+#     - CVE-2018-7584
+#     - CVE-2018-5712
+#     - CVE-2016-10166
+#   7.1.17-r0:
+#     - CVE-2018-10549
+#     - CVE-2018-10548
+#     - CVE-2018-10547
+#     - CVE-2018-10546
+#     - CVE-2018-10545
+#   7.1.15-r0:
+#     - CVE-2018-7584
+#   7.1.13-r0:
+#     - CVE-2018-5711
+#     - CVE-2018-5712
+#   7.1.11-r0:
+#     - CVE-2016-1283
+#   7.1.7-r0:
+#     - CVE-2017-7890
+#     - CVE-2017-9224
+#     - CVE-2017-9226
+#     - CVE-2017-9227
+#     - CVE-2017-9228
+#     - CVE-2017-9229
+
+prepare() {
+	cd "$builddir"
+
+	default_prepare
+	update_config_sub
+
+	local vapi=$(sed -n '/#define PHP_API_VERSION/{s/.* //;p}' main/php.h)
+	if [ "$vapi" != "$_apiver" ]; then
+		error "Upstreram API version is now $vapi. Expecting $_apiver"
+		error "After updating _apiver, all 3rd-party extensions must be rebuilt."
+		return 1
+	fi
+
+	# https://bugs.php.net/63362 - Not needed but installed headers.
+	# Drop some Windows specific headers to avoid installation,
+	# before build to ensure they are really not needed.
+	rm -f TSRM/tsrm_win32.h \
+		TSRM/tsrm_config.w32.h \
+		Zend/zend_config.w32.h \
+		ext/mysqlnd/config-win.h \
+		ext/standard/winver.h \
+		main/win32_internal_function_disabled.h \
+		main/win95nt.h
+
+	# Fix some bogus permissions.
+	find . -name \*.[ch] -exec chmod 644 {} \;
+
+	# XXX: Delete failing tests.
+	sed -n '/^[^#]/p' "$srcdir"/disabled-tests.list | while read item; do
+		rm -r $item  # do it in this way to apply globbing...
+	done
+
+	autoconf
+}
+
+# Notes:
+# * gd-jis-conv breaks any non-latin font rendering (vakartel).
+# * libxml cannot be build as shared.
+# * Doesn't work with system-provided onigurama, some tests fail (invalid code
+#   point); probably because bundled onigurama is version 5.x, but we have 6.x.
+_build() {
+	local without_pcre_jit
+	[ "$CARCH" = "s390x" ] && without_pcre_jit="--without-pcre-jit"
+
+	EXTENSION_DIR=$_extension_dir \
+    ./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--program-suffix=$_phpver \
+		--libdir=$_libdir \
+		--datadir=/usr/share/php/$_phpver \
+		--sysconfdir=/etc/php/$_phpver \
+		--localstatedir=/var \
+		--with-layout=GNU \
+		--with-config-file-path=/etc/php/$_phpver \
+		--with-config-file-scan-dir=$_extension_confd \
+		--with-pic \
+		--with-pear=/usr/share/php/$_phpver \
+		--disable-short-tags \
+		\
+		--enable-bcmath=shared \
+		--with-bz2=shared \
+		--enable-calendar=shared \
+		--enable-ctype=shared \
+		--with-curl=shared \
+		--enable-dba=shared \
+			--with-db4 \
+			--with-dbmaker=shared \
+			--with-gdbm \
+		--enable-dom=shared \
+		--with-enchant=shared \
+		--enable-exif=shared \
+		--enable-fileinfo=shared \
+		--enable-ftp=shared \
+		--with-gd=shared \
+			--with-freetype-dir=/usr \
+			--disable-gd-jis-conv \
+			--enable-gd-native-ttf \
+			--with-jpeg-dir=/usr \
+			--with-png-dir=/usr \
+			--with-webp-dir=/usr \
+			--with-xpm-dir=/usr \
+		--with-gettext=shared \
+		--with-gmp=shared \
+		--with-iconv=shared \
+		--with-imap=shared \
+			--with-imap-ssl \
+		--enable-intl=shared \
+	    	--with-icu-dir=/usr \
+		--enable-json=shared \
+		--with-ldap=shared \
+			--with-ldap-sasl \
+		--with-libedit \
+		--enable-libxml \
+		    --with-libxml-dir=/usr \
+		--enable-mbstring=shared \
+		--with-mcrypt=shared \
+		--with-mysqli=shared,mysqlnd \
+			--with-mysql-sock=/run/mysqld/mysqld.sock \
+		--enable-mysqlnd=shared \
+		--enable-opcache=shared \
+		--with-openssl=shared  \
+			--with-system-ciphers \
+    		--with-kerberos \
+		--enable-pcntl=shared \
+		--with-pcre-regex=/usr \
+			$without_pcre_jit \
+		--enable-pdo=shared \
+			--with-pdo-dblib=shared \
+			--with-pdo-mysql=shared,mysqlnd \
+			--with-pdo-odbc=shared,unixODBC,/usr \
+			--with-pdo-pgsql=shared \
+			--with-pdo-sqlite=shared,/usr \
+		--with-pgsql=shared \
+		--enable-phar=shared \
+		--enable-posix=shared \
+		--with-pspell=shared \
+		--without-readline \
+		--with-recode=shared \
+		--enable-session=shared \
+		--enable-shmop=shared \
+		--enable-simplexml=shared \
+		--with-snmp=shared \
+		--enable-soap=shared \
+		--enable-sockets=shared \
+		--with-sqlite3=shared,/usr \
+		--enable-sysvmsg=shared \
+		--enable-sysvsem=shared \
+		--enable-sysvshm=shared \
+		--with-tidy=shared \
+		--enable-tokenizer=shared \
+		--with-unixODBC=shared,/usr \
+		--enable-wddx=shared \
+		--enable-xml=shared \
+		--enable-xmlreader=shared \
+		--with-xmlrpc=shared \
+		--enable-xmlwriter=shared \
+		--with-xsl=shared \
+		--enable-zip=shared \
+			--with-libzip=/usr \
+		--with-zlib \
+		--with-zlib-dir=/usr \
+		$@
+
+	make
+}
+
+build() {
+	cd "$builddir"
+
+	# phpdbg
+	_build --enable-phpdbg \
+		--enable-phpdbg-webhelper \
+		--disable-cgi \
+		--disable-cli
+
+	# apache2 module
+	_build --disable-phpdbg \
+		--disable-cgi \
+		--disable-cli \
+		--with-apxs2
+	mv libs/libphp${_phpver:0:1}.so sapi/apache2handler/mod_php${_phpver:0:1}.so
+
+	# cgi, cli, fpm, embed, litespeed
+	_build --disable-phpdbg \
+		--enable-fpm \
+		--enable-embed \
+		--with-litespeed
+}
+
+check() {
+	cd "$builddir"
+
+	# PHP is so stupid that it's not able to resolve dependencies
+	# between extensions and load them in correct order, so we must
+	# help it...
+	# opcache is Zend extension, it's handled specially in Makefile
+	local php_modules=$(_extensions_by_load_order \
+		| grep -vx opcache \
+		| xargs -n 1 printf "'$builddir/modules/%s.la' ")
+	sed -i "/^PHP_TEST_SHARED_EXTENSIONS/,/extension=/ \
+		s|in \$(PHP_MODULES)\"*|in $php_modules|" Makefile
+
+	# XXX: Few tests fail on the named platforms.
+	# Ignore it for now and continue build even on test failures.
+	local allow_fail='no'
+	case "$CARCH" in
+		x86 | armhf | aarch64) allow_fail='yes'
+	esac
+
+	NO_INTERACTION=1 REPORT_EXIT_STATUS=1 \
+		SKIP_SLOW_TESTS=1 SKIP_ONLINE_TESTS=1 TEST_TIMEOUT=10 \
+		TZ= LANG= LC_ALL= \
+		make test || [ "$allow_fail" = yes ] || return 1
+
+	echo 'NOTE: We have skipped quite a lot tests, see disabled-tests.list.'
+}
+
+package() {
+    replaces="php php7"
+
+	cd "$builddir"
+
+    # Install to pkgdir
+    local jobs=$(($(nproc)+1))
+	make -j$jobs INSTALL_ROOT="$pkgdir" install
+
+    #
+	install -Dm644 php.ini-production "$pkgdir"/etc/php/$_phpver/php.ini
+	install -Dm644 php.ini-production "$pkgdir"/etc/php/$_phpver/php.ini-production
+	install -Dm644 php.ini-development "$pkgdir"/etc/php/$_phpver/php.ini-development
+
+    # Update pear files
+	local file; for file in pear peardev pecl; do
+		sed -i -e "s|/usr/bin/php|/usr/bin/php$_phpver|g" \
+			-e "s|PHP=php|PHP=php$_phpver|" \
+			"$pkgdir"/usr/bin/$file
+	done
+
+    # # Update FPM versions in configuration files
+	mv "$pkgdir"/etc/php/$_phpver/php-fpm.conf.default "$pkgdir"/etc/php/$_phpver/php-fpm.conf
+    sed -i "s|;pid = run/php-fpm$_phpver.pid|pid = run/php-fpm/$_phpver/php-fpm7.pid|g" "$pkgdir"/etc/php/$_phpver/php-fpm.conf
+    sed -i "s|;error_log = log/php/$_phpver/error.log|error_log = log/php/$_phpver/error.log|g" "$pkgdir"/etc/php/$_phpver/php-fpm.conf
+	mv "$pkgdir"/etc/php/$_phpver/php-fpm.d/www.conf.default "$pkgdir"/etc/php/$_phpver/php-fpm.d/www.conf
+    sed -i "s|nobody|www-data|g" "$pkgdir"/etc/php/$_phpver/php-fpm.d/www.conf
+    sed -i "s|listen = 127.0.0.1:9000|listen = 9000|g" "$pkgdir"/etc/php/$_phpver/php-fpm.d/www.conf
+    sed -i "s|;listen.owner = www-data|listen.owner = www-data|g" "$pkgdir"/etc/php/$_phpver/php-fpm.d/www.conf
+    sed -i "s|;listen.group = www-data|listen.group = www-data|g" "$pkgdir"/etc/php/$_phpver/php-fpm.d/www.conf
+
+    # Clean
+	find "$pkgdir" -name '.*' | xargs rm -rf
+	rmdir "$pkgdir"/var/run
+
+	if [ "$_default_php" = yes ]; then
+		ln -s php$_phpver "$pkgdir"/usr/bin/php
+	fi
+}
+
+dev() {
+	default_dev
+    replaces="php-dev php7-dev"
+
+	cd "$pkgdir"
+
+	_mv usr/bin/php-config$_phpver \
+		usr/bin/phpize$_phpver \
+		"$subpkgdir"/usr/bin/
+
+	_mv ./$_libdir/build "$subpkgdir"/$_libdir/
+
+	if [ "$_default_php" = yes ]; then
+		ln -s php-config$_phpver "$subpkgdir"/usr/bin/php-config
+		ln -s phpize$_phpver "$subpkgdir"/usr/bin/phpize
+	fi
+}
+
+doc() {
+	default_doc
+    replaces="php-doc php7-doc"
+
+	cd "$builddir"
+
+	mkdir -p "$subpkgdir"/usr/share/doc/php/$_phpver
+
+	cp CODING_STANDARDS CREDITS EXTENSIONS INSTALL LICENSE NEWS README* UPGRADING* \
+		"$subpkgdir"/usr/share/doc/php/$_phpver/
+}
+
+apache2() {
+	pkgdesc="PHP$_phpver Module for Apache2"
+	depends="$depends apache2"
+    replaces="php-apache2 php7-apache2"
+
+	install -D -m 755 "$builddir"/sapi/apache2handler/mod_php${_phpver:0:1}.so \
+		"$subpkgdir"/usr/lib/apache2/mod_php${_phpver:0:1}.so
+
+	install -D -m 644 "$srcdir"/php${_phpver:0:1}-module.conf \
+		"$subpkgdir"/etc/apache2/conf.d/php${_phpver:0:1}-module.conf
+}
+
+phpdbg() {
+	pkgdesc="Interactive PHP$_phpver debugger"
+    replaces="php-phpdbg php7-phpdbg"
+
+	install -Dm755 "$builddir"/sapi/phpdbg/phpdbg \
+		"$subpkgdir"/usr/bin/phpdbg$_phpver
+
+	if [ "$_default_php" = yes ]; then
+		ln -s phpdbg$_phpver "$subpkgdir"/usr/bin/phpdbg
+	fi
+}
+
+embed() {
+	pkgdesc="PHP$_phpver Embedded Library"
+    replaces="php-embed php7-embed"
+
+	_mv "$pkgdir"/usr/lib/libphp*.so "$subpkgdir"/usr/lib/
+}
+
+litespeed() {
+	pkgdesc="PHP$_phpver LiteSpeed SAPI"
+    depends="$depends $pkgname-bcmath $pkgname-json $pkgname-session"
+    replaces="php-litespeed php7-litespeed"
+
+	mkdir -p "$subpkgdir"/usr/bin
+
+	mv "$pkgdir"/usr/bin/lsphp$_phpver "$subpkgdir"/usr/bin
+
+	if [ "$_default_php" = yes ]; then
+		ln -s lsphp$_phpver "$subpkgdir"/usr/bin/lsphp
+	fi
+}
+
+cgi() {
+	pkgdesc="PHP$_phpver Common Gateway Interface"
+    replaces="php-cgi php7-cgi"
+
+	_mv "$pkgdir"/usr/bin/php-cgi$_phpver "$subpkgdir"/usr/bin/
+
+	if [ "$_default_php" = yes ]; then
+		ln -s php-cgi$_phpver "$subpkgdir"/usr/bin/php-cgi
+	fi
+}
+
+fpm() {
+	pkgdesc="PHP$_phpver FastCGI Process Manager"
+    replaces="php-fpm php7-fpm"
+    install="php${_phpver:0:1}-fpm.pre-install php${_phpver:0:1}-fpm.post-install"
+
+	cd "$pkgdir"
+
+	_mv var "$subpkgdir"/
+	_mv usr/share/php/$_phpver/fpm "$subpkgdir"/var/lib/php/$_phpver/
+	_mv usr/sbin "$subpkgdir"/usr/
+	_mv etc/php/$_phpver/php-fpm* "$subpkgdir"/etc/php/$_phpver/
+
+	install -D -m 755 "$srcdir"/php${_phpver:0:1}-fpm.initd \
+		"$subpkgdir"/etc/init.d/php-fpm$_phpver
+
+	install -D -m 644 "$srcdir"/php${_phpver:0:1}-fpm.logrotate \
+		"$subpkgdir"/etc/logrotate.d/php-fpm$_phpver
+
+	mkdir -p "$subpkgdir"/var/log/php/$_phpver
+
+	if [ "$_default_php" = yes ]; then
+		ln -s php-fpm$_phpver "$subpkgdir"/usr/sbin/php-fpm
+	fi
+}
+
+pear() {
+	pkgdesc="PHP$_phpver Extension and Application Repository"
+	depends="$pkgname $pkgname-xml"
+    replaces="php-pear php7-pear"
+
+	cd "$pkgdir"
+
+	# pecl needs xml extension and since we build it as shared, it must be
+	# explicitly declared to be loaded.
+	sed -i 's/\$INCARG/& -d extension=xml.so/' usr/bin/pecl
+
+	mkdir -p "$subpkgdir"/usr/bin
+	local file; for file in pecl pear peardev; do
+		mv usr/bin/$file "$subpkgdir"/usr/bin/$file$_phpver
+		if [ "$_default_php" = yes ]; then
+			ln -s $file$_phpver "$subpkgdir"/usr/bin/$file
+		fi
+	done
+
+	_mv etc/php/$_phpver/pear.conf "$subpkgdir"/etc/php/$_phpver/
+	_mv usr/share "$subpkgdir"/usr/
+}
+
+common() {
+	pkgdesc="$pkgdesc (common config)"
+	depends=""
+    replaces="php-common php7-common"
+
+	cd "$pkgdir"
+
+	_mv usr/lib "$subpkgdir"/usr/
+	_mv etc "$subpkgdir"/
+	mkdir -p "$subpkgdir"/$_extension_confd
+}
+
+phar() {
+	_extension
+    replaces="php-phar php7-phar"
+
+	cd "$pkgdir"
+
+	mkdir -p "$subpkgdir"/usr/bin
+	mv usr/bin/phar.phar "$subpkgdir"/usr/bin/phar.phar$_phpver
+
+	rm usr/bin/phar
+	ln -s phar.phar$_phpver "$subpkgdir"/usr/bin/phar$_phpver
+
+	if [ "$_default_php" = yes ]; then
+		ln -s phar.phar$_phpver "$subpkgdir"/usr/bin/phar.phar
+		ln -s phar.phar$_phpver "$subpkgdir"/usr/bin/phar
+	fi
+}
+
+_extension() {
+	local extname="${subpkgname#$pkgname-}"
+	local extdepends="$(eval "echo \$_depends_$extname")"
+	local extdesc="$(head -n1 "$builddir"/ext/$extname/CREDITS 2>/dev/null ||:)"
+	pkgdesc="PHP$_phpver extension: ${extdesc:-$extname}"
+    replaces="php-$extname php7-$extname"
+
+	: ${extdepends:=$(_resolve_extension_deps "$extname")}
+	depends="$depends $extdepends"
+
+	local load_order=$(_extension_load_order "$extname")
+
+	# extension prefix
+	local prefix=
+	[ "$extname" != "opcache" ] || prefix="zend_"
+
+	_mv "$pkgdir"/$_extension_dir/$extname.so \
+		"$subpkgdir"/$_extension_dir/
+
+	mkdir -p "$subpkgdir"/$_extension_confd
+	echo "${prefix}extension=$extname.so" \
+		> "$subpkgdir"/$_extension_confd/$(printf %02d $load_order)_$extname.ini
+}
+
+# Resolves dependencies of the given extension name (without $pkgname- prefix)
+# on other extensions in $_extensions and prints them with $pkgname- prefix.
+_resolve_extension_deps() {
+	local name="$1"
+
+	# We use config.w32 just because it's more accurate than config.m4.
+	local config="$builddir/ext/$name/config.w32"
+	[ -f "$config" ] || return 0
+
+	cat "$config" \
+		| sed -En "s/.*ADD_EXTENSION_DEP\('$name', ([^)]+)\).*/\1/p" \
+		| tr -d "'," | tr ' ' '\n' \
+		| sort -u \
+		| while read dep; do
+			if echo "$_extensions" | grep -qw "$dep"; then
+				echo "$pkgname-$dep"
+			fi
+		done
+}
+
+# Prints a load order (0-based integer) for the given extension name. Extension
+# with lower load order should be loaded before exts with higher load order.
+# It's based on number of dependencies of the extension (with exception for
+# "imap"), which is flawed, but simple and good enough for now.
+_extension_load_order() {
+	local name="$1"
+	local deps=$(eval "echo \$_depends_$name")
+
+	case "$name" in
+		# XXX: This must be loaded after recode, even though it does
+		# not depend on it. So we must use this hack...
+		imap) echo 1;;
+		*) echo "${deps:=$(_resolve_extension_deps $name)}" | wc -w;;
+	esac
+}
+
+# Prints $_extensions sorted by load order and name.
+_extensions_by_load_order() {
+	local deps list name
+
+	for name in $_extensions; do
+		list="$list $(_extension_load_order $name);$name"
+	done
+	printf '%s\n' $list | sort -t ';' -k 1 | sed -E 's/\d+;//'
+}
+
+_mv() {
+	local dest; for dest; do true; done  # get last argument
+	mkdir -p "$dest"
+	mv $@
+}
+
+sha512sums="60ecf04a5fcb77ad839f5c5514f0d83e16aa9d3cc5250a428ff6cb43defc9d1626bdb5b5ea2671261cc273c51c18387d6267307e28c25d18ca98b212cec7cc99  php-7.1.33.tar.bz2
+d55f7d014c3a42a09ca2fa771411e516950c7f60c1cac0828368d70300be1bf60e73c7d3d75dcabd7420a464470ec6378311a2425ae478461eb3be0e53a89703  php7-fpm.initd
+b00400931dd9e3f050329bed355bada45923dcc2dc01637812a6e03bcadad7d428b342cc47ab487220904ecd70775b15fb53c19b44ddb45b9f92a8ba7a05646b  php7-fpm.logrotate
+774f086974daa223b2a84ce39406c302ef4da11efb259d129d8daa2dd3e873fa44168026703f9cee9ae538073e608aa72142fd75d036ad193e7861d2fc1aa7be  php7-fpm.post-install
+0197cf9c7e884805045883e24fa302a44a7dc23e1337e5d2df0404984991f9a4b754a5a6bd649ef48f0dc4ebb6b3bd16af74e638e65db0fa37ee30946ee67750  php7-fpm.pre-install
+274bd7b0b2b7002fa84c779640af37b59258bb37b05cb7dd5c89452977d71807f628d91b523b5039608376d1f760f3425d165242ca75ee5129b2730e71c4e198  php7-module.conf
+f8ecae241a90cbc3e98aa4deb3d5d35ef555f51380e29f4e182a8060dffeb84be74f030a14c6b452668471030d78964f52795ca74275db05543ccad20ef1f2cc  allow-build-recode-and-imap-together.patch
+f2c980bf296d9db074196372cbb91b4a81138e25c13f15bab4dd19839209e95f6e0225d89e3105bbf99676818440f31f3cff56bb87d8eb58b6b4ebaf99cfe962  disabled-tests.list
+294fa2816a58c4b8b511a52e603f8678402237af31ff36783544a9ceca8a02774ad7f0f12e000e467aad4efa1488c596cfd30ff83abfaae627068cbe6055cd67  fix-tests-devserver.patch
+d09add3f1524eed753405a5688dbbfa0a369196065a02b5b43d096458adb9128cdc5466a4732fef8909b55a20d92087ac0f4d816f8e0743a410c05f1010d7dfc  includedir.patch
+be837619b9f7f065401816cc450f46bea95bdb6328c4651ac131b3677b50f823a516392893c447c8452f090c6f33146930a5027b25a6dd949e46cf85f2eceba2  install-pear.patch
+94987222778f744de2652465e86d47c0b86fa8a9d7853937fcd2ca00167cff769d01ba8e98e3db8980c26e6e9951f23a218285b1bf093b24b7f353bc094ee1ea  php7-fpm-version-suffix.patch"
