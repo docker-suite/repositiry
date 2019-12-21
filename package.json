@@ -6,7 +6,7 @@
     "gh-pages": "^2.1.1"
   },
   "scripts": {
-    "deploy": "gh-pages --dist public --branch gh-pages --message 'Repository update'"
+    "deploy": "gh-pages --dist public --repo https://$GH_TOKEN@github.com/docker-suite/repository.git --user 'hexosse <hexosse@gmail.com>' --branch gh-pages --message 'Repository updates'"
   },
   "repository": {
     "type": "git",
