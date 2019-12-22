@@ -1,0 +1,65 @@
+# Maintainer: Hexosse <hexosse@gmail.com>
+
+pkgname=php7.1-xlswriter
+pkgver=1.3.2
+pkgrel=0
+_pkgreal=xlswriter
+_phpver=7.1
+_php=php$_phpver
+
+pkgdesc="A PHP Extension for creating and reader XLSX files. "
+url="https://pecl.php.net/package/$_pkgreal"
+arch="all !s390x"
+license="BSD-2-Clause"
+
+depends="$_php-common libxlsxwriter zlib"
+makedepends="$_php-dev libxlsxwriter-dev zlib-dev"
+source="https://pecl.php.net/get/$_pkgreal-$pkgver.tgz"
+srcdir="/tmp/$pkgname-$pkgver"
+builddir="$srcdir/$_pkgreal-$pkgver"
+_libdir="/usr/lib/php/$_phpver"
+_extension_dir="$_libdir/modules"
+_extension_confd="/etc/php/$_phpver/conf.d"
+
+prepare() {
+    default_prepare
+}
+
+build() {
+    replaces="php-xlswriter php${_phpver:0:1}-xlswriter"
+
+    cd "$builddir"
+
+    phpize
+
+	EXTENSION_DIR=$_extension_dir \
+    ./configure \
+        --enable-reader \
+        --prefix=/usr \
+        --with-php-config=/usr/bin/php-config \
+        --with-libxlsxwriter
+
+    local jobs=$(($(nproc)+1))
+    make -j$jobs
+}
+
+check() {
+    cd "$builddir"
+
+    local allow_fail='yes'
+
+    NO_INTERACTION=1 REPORT_EXIT_STATUS=1 \
+    SKIP_SLOW_TESTS=1 SKIP_ONLINE_TESTS=1 TEST_TIMEOUT=10 \
+    TZ= LANG= LC_ALL= \
+    make test || [ "$allow_fail" = yes ]
+}
+
+package() {
+	cd "$builddir"
+
+	make INSTALL_ROOT="$pkgdir"/ install
+	install -d "$pkgdir"/etc/php/$_phpver/conf.d
+	echo "extension=$_pkgreal.so" > "$pkgdir"/$_extension_confd/03_$_pkgreal.ini
+}
+
+sha512sums="6654ac011463bc6cfce8f8c607204346399b1cec3089272d252bba5ffa3fbe385033e1469fea35cdf5e0a9ce12be72b882a27491480ad13cddebeeb49d5d74f7  xlswriter-1.3.2.tgz"
