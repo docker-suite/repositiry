@@ -28,7 +28,7 @@ run: ## Run a command in a new Docker container: make run v=[3.7|3.8|3.9|3.10] c
 		-v $(DIR)/packages/alpine/common:/packages/common \
 		-v $(DIR)/packages/alpine/v$(version):/packages/$(version) \
 		-w /packages/$(version) \
-		dsuite/apk-builder:$(version) $(c)
+		dsuite/apk-builder-dev:$(version) $(c)
 
 package: ## Build a specific package: make package v=[3.7|3.8|3.9|3.10] p=[<package-name1> <package-name2>]
 	@# -- use default version if v is not specified
@@ -50,13 +50,13 @@ dependency: ## Create a package dependency: make dependency v=3.7 p=php7.1 d=com
 		-e https_proxy=${https_proxy} \
 		-v $(DIR)/config:/config \
 		-v $(DIR)/packages/alpine/common:/packages \
-		dsuite/apk-builder:$(version) bash -c "dependency -p $(p) -d \"$(d)\""  > /dev/null || true
+		dsuite/apk-builder-dev:$(version) bash -c "dependency -p $(p) -d \"$(d)\""  > /dev/null || true
 	@docker run -it --rm \
 		-e http_proxy=${http_proxy} \
 		-e https_proxy=${https_proxy} \
 		-v $(DIR)/config:/config \
 		-v $(DIR)/packages/alpine/v$(version):/packages \
-		dsuite/apk-builder:$(version) bash -c "dependency -p $(p) -d \"$(d)\""  > /dev/null || true
+		dsuite/apk-builder-dev:$(version) bash -c "dependency -p $(p) -d \"$(d)\""  > /dev/null || true
 
 package-all: ## Build all packages for all versions
 	@# use default version if v is not specified
@@ -82,3 +82,7 @@ deploy: ## Deploy built packages to gh-pages
 		-v $(DIR)/package.json:/package.json \
 		-w / \
 		dsuite/alpine-nodejs:lts bash -c "apk add git && npm install && npm run deploy"
+
+clean: ## Clean the workspace
+	@rm -rf $(DIR)/packages/alpine/*/pkg
+	@rm -rf $(DIR)/packages/alpine/*/*/pkg

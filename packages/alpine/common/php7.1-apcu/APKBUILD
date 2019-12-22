@@ -1,0 +1,65 @@
+# Maintainer: Hexosse <hexosse@gmail.com>
+
+pkgname=php7.1-apcu
+pkgver=5.1.18
+pkgrel=0
+_pkgreal=apcu
+_phpver=7.1
+_php=php$_phpver
+
+pkgdesc="PHP $_phpver APCu - APC User Cache extension"
+url="https://pecl.php.net/package/$_pkgreal"
+arch="all"
+license="PHP-3.01"
+
+depends="$_php-common"
+makedepends="pcre2-dev $_php-dev autoconf re2c"
+source="https://pecl.php.net/get/$_pkgreal-$pkgver.tgz"
+srcdir="/tmp/$pkgname-$pkgver"
+builddir="$srcdir/$_pkgreal-$pkgver"
+_libdir="/usr/lib/php/$_phpver"
+_extension_dir="$_libdir/modules"
+_extension_confd="/etc/php/$_phpver/conf.d"
+
+prepare() {
+    default_prepare
+}
+
+build() {
+    replaces="php-apcu php/$_phpver-apcu"
+
+    cd "$builddir"
+
+    phpize
+
+	EXTENSION_DIR=$_extension_dir \
+    ./configure \
+        --prefix=/usr \
+        --with-php-config=/usr/bin/php-config
+
+  local jobs=$(($(nproc)+1))
+  make -j$jobs
+}
+
+check() {
+    cd "$builddir"
+
+    local allow_fail='yes'
+
+    NO_INTERACTION=1 REPORT_EXIT_STATUS=1 \
+    SKIP_SLOW_TESTS=1 SKIP_ONLINE_TESTS=1 TEST_TIMEOUT=10 \
+    TZ= LANG= LC_ALL= \
+    make test || [ "$allow_fail" = yes ]
+}
+
+package() {
+	cd "$builddir"
+
+	make INSTALL_ROOT="$pkgdir"/ install
+	install -D -m644 apc.php "$pkgdir"/usr/share/php/$_phpver/apcu/apc.php
+
+	install -d "$pkgdir"/etc/php/$_phpver/conf.d
+	echo "extension=$_pkgreal.so" > "$pkgdir"/$_extension_confd/03_$_pkgreal.ini
+}
+
+sha512sums="5e9c5b4540be7abdf2f473d2f8955d8708934a1d6e05cb2c99154cc7ba8a2bbf9afde51769e20f46ef278efd6f60b9172e0864c31e0976b9d3096a337035e7a9  apcu-5.1.18.tgz"
