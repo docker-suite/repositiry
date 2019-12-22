@@ -1,0 +1,23 @@
+# Maintainer: Hexosse <hexosse@gmail.com>
+
+pkgname=phpunit
+pkgver=7.5.18
+pkgrel=0
+
+pkgdesc="The PHP Unit Testing framework"
+url="https://phpunit.de/"
+arch="noarch"
+license="BSD 3 Clause"
+
+depends=""
+makedepends=""
+source="$pkgname-$pkgver.phar::https://phar.phpunit.de/$pkgname-$pkgver.phar"
+srcdir="/tmp/$pkgname-$pkgver"
+builddir="$srcdir/$pkgname-$pkgver"
+options="!check"
+
+package() {
+    install -m 0755 -D "$srcdir"/$pkgname-$pkgver.phar "$pkgdir"/usr/bin/$pkgname
+}
+
+sha512sums="cb203e96d925e7bb571367a5150aa56f37923738fb18794f85d09024903557a403a60d80863590d82197e2dcc3a4d52a0fedc5990b1a112ed159020112578a78  phpunit-7.5.18.phar"
