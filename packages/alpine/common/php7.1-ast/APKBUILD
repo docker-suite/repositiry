@@ -26,7 +26,7 @@ prepare() {
 }
 
 build() {
-    replaces="php-ast php/$_phpver-ast"
+    replaces="php-ast php${_phpver:0:1}-ast"
 
     cd "$builddir"
 
