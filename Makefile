@@ -5,7 +5,8 @@ DIR:=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
 default = 3.10
 
 ##
-.DEFAULT_GOAL := package
+.DEFAULT_GOAL := help
+USE_TTY ?= -t
 .PHONY: *
 
 
@@ -20,7 +21,7 @@ run: ## Run a command in a new Docker container: make run v=[3.7|3.8|3.9|3.10] c
 	@mkdir -p $(DIR)/config
 	@# -- make sure /public folder exist on host
 	@mkdir -p $(DIR)/public
-	@docker run -it --rm \
+	@docker run -i ${USE_TTY} --rm \
 		-e http_proxy=${http_proxy} \
 		-e https_proxy=${https_proxy} \
 		-v $(DIR)/config:/config \
@@ -45,13 +46,13 @@ dependency: ## Create a package dependency: make dependency v=3.7 p=php7.1 d=com
 	@test "$(p)"
 	@test "$(d)"
 	@# -- Create dependency
-	@docker run -it --rm \
+	@docker run -i ${USE_TTY} --rm \
 		-e http_proxy=${http_proxy} \
 		-e https_proxy=${https_proxy} \
 		-v $(DIR)/config:/config \
 		-v $(DIR)/packages/alpine/common:/packages \
 		dsuite/apk-builder-dev:$(version) bash -c "dependency -p $(p) -d \"$(d)\""  > /dev/null || true
-	@docker run -it --rm \
+	@docker run -i ${USE_TTY} --rm \
 		-e http_proxy=${http_proxy} \
 		-e https_proxy=${https_proxy} \
 		-v $(DIR)/config:/config \
@@ -74,7 +75,7 @@ deploy: ## Deploy built packages to gh-pages
 	@# -- check if token is defined
 	@test "$(token)"
 	@# -- publish packages to gh-pages
-	@docker run -it --rm \
+	@docker run -i ${USE_TTY} --rm \
 		-e http_proxy=${http_proxy} \
 		-e https_proxy=${https_proxy} \
 		-e GH_TOKEN=$(token) \
