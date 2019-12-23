@@ -1,0 +1,64 @@
+# Maintainer: Hexosse <hexosse@gmail.com>
+
+pkgname=php7.1-meminfo
+pkgver=1.0.5
+pkgrel=0
+_pkgreal=meminfo
+_phpver=7.1
+_php=php$_phpver
+
+pkgdesc="PHP extension to get insight about memory usage"
+url="https://github.com/BitOne/php-meminfo"
+arch="all"
+license="MIT"
+
+depends="$_php-common"
+makedepends="$_php-dev"
+source="$_pkgreal-$pkgver.tar.gz::https://github.com/BitOne/php-meminfo/archive/v$pkgver.tar.gz"
+srcdir="/tmp/$pkgname-$pkgver"
+builddir="$srcdir/php-$_pkgreal-$pkgver"
+_libdir="/usr/lib/php/$_phpver"
+_extension_dir="$_libdir/modules"
+_extension_confd="/etc/php/$_phpver/conf.d"
+
+prepare() {
+    default_prepare
+}
+
+build() {
+    replaces="php-meminfo php${_phpver:0:1}-meminfo"
+
+    cd "$builddir/extension/php7"
+
+    phpize
+
+	EXTENSION_DIR=$_extension_dir \
+    ./configure \
+        --prefix=/usr \
+        --with-php-config=/usr/bin/php-config \
+        --enable-meminfo
+
+    local jobs=$(($(nproc)+1))
+    make -j$jobs
+}
+
+check() {
+    cd "$builddir/extension/php7"
+
+    local allow_fail='yes'
+
+    NO_INTERACTION=1 REPORT_EXIT_STATUS=1 \
+    SKIP_SLOW_TESTS=1 SKIP_ONLINE_TESTS=1 TEST_TIMEOUT=10 \
+    TZ= LANG= LC_ALL= \
+    make test || [ "$allow_fail" = yes ]
+}
+
+package() {
+    cd "$builddir/extension/php7"
+
+	make INSTALL_ROOT="$pkgdir"/ install
+	install -d "$pkgdir"/etc/php/$_phpver/conf.d
+	echo "extension=$_pkgreal.so" > "$pkgdir"/$_extension_confd/03_$_pkgreal.ini
+}
+
+sha512sums="fad7cc7e8a638316b05292e24c1739f46f2d8212b1ab262e062e2c234495ffe6fe460cacd452c6f524d05b6093755c9c189d568625aaebef8ab6f0d0cc241dc8  meminfo-1.0.5.tar.gz"
