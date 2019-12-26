@@ -1,0 +1,5 @@
+#!/bin/sh
+
+_phpver=7.2
+
+ln -sf /usr/bin/php-cgi$_phpver /usr/bin/php-cgi

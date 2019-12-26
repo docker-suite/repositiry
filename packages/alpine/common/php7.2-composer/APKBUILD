@@ -1,0 +1,23 @@
+# Maintainer: Hexosse <hexosse@gmail.com>
+
+pkgname=php7.2-composer
+pkgver=1.0.0
+pkgrel=0
+_phpver=7.2
+_php=php$_phpver
+
+pkgdesc="Dependency manager for PHP"
+url="https://getcomposer.org/"
+arch="noarch"
+license="MIT"
+
+depends="composer $_php $_php-phar $_php-json $_php-mbstring $_php-openssl $_php-iconv"
+makedepends=""
+srcdir="/tmp/$pkgname-$pkgver"
+builddir="$srcdir/$pkgname-$pkgver"
+options="!check"
+install_if="composer"
+
+package() {
+  mkdir -p "$pkgdir"
+}
