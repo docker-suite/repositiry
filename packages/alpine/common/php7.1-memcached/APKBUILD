@@ -19,7 +19,7 @@ srcdir="/tmp/$pkgname-$pkgver"
 builddir="$srcdir/$_pkgreal-$pkgver"
 _libdir="/usr/lib/php/$_phpver"
 _extension_dir="$_libdir/modules"
-_extension_confd="/etc/php/$_phpver/conf.d"
+_config_dir="/etc/php/$_phpver/conf.d"
 
 prepare() {
     default_prepare
@@ -30,12 +30,13 @@ build() {
 
     cd "$builddir"
 
-    phpize
+    phpize$_phpver
 
 	EXTENSION_DIR=$_extension_dir \
     ./configure \
         --prefix=/usr \
-        --with-php-config=/usr/bin/php-config
+		--libdir=$_libdir \
+        --with-php-config=/usr/bin/php-config$_phpver
 
   local jobs=$(($(nproc)+1))
   make -j$jobs
@@ -55,9 +56,9 @@ check() {
 package() {
 	cd "$builddir"
 
-	make INSTALL_ROOT="$pkgdir"/ install
-	install -d "$pkgdir"/etc/php/$_phpver/conf.d
-	echo "extension=$_pkgreal.so" > "$pkgdir"/$_extension_confd/03_$_pkgreal.ini
+	make INSTALL_ROOT="$pkgdir" install
+	install -d "$pkgdir/$_config_dir"
+	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
 sha512sums="87d5fd079fcaad81139785d6766da71b23a1a0fe907d4b22f3a787af148a20412c11df11c4d98c165241658baf0d87c8a6b29de15db07a0f9d1fabc8aec8f0e9  memcached-3.1.5.tgz"

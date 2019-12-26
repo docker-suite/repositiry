@@ -1,22 +1,22 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
-pkgname=php7.1-ast
-pkgver=1.0.5
+pkgname=php7.1-sodium
+pkgver=2.0.22
 pkgrel=0
-_pkgreal=ast
+_pkgreal=sodium
 _phpver=7.1
 _php=php$_phpver
 
-pkgdesc="PHP $_phpver ast - abstract syntax tree"
-url="https://pecl.php.net/package/$_pkgreal"
+pkgdesc="sodium-1.1 parser and emitter"
+url="https://pecl.php.net/package/lib$_pkgreal"
 arch="all"
-license="BSD-3-Clause"
+license="BSD-2"
 
-depends="$_php-common"
-makedepends="$_php-dev autoconf re2c"
-source="https://pecl.php.net/get/$_pkgreal-$pkgver.tgz"
+depends="$_php-common libsodium"
+makedepends="$_php-dev libsodium-dev"
+source="https://pecl.php.net/get/lib$_pkgreal-$pkgver.tgz"
 srcdir="/tmp/$pkgname-$pkgver"
-builddir="$srcdir/$_pkgreal-$pkgver"
+builddir="$srcdir/lib$_pkgreal-$pkgver"
 _libdir="/usr/lib/php/$_phpver"
 _extension_dir="$_libdir/modules"
 _config_dir="/etc/php/$_phpver/conf.d"
@@ -26,7 +26,7 @@ prepare() {
 }
 
 build() {
-    replaces="php-ast php${_phpver:0:1}-ast"
+    replaces="php-sodium php${_phpver:0:1}-sodium"
 
     cd "$builddir"
 
@@ -38,8 +38,8 @@ build() {
 		--libdir=$_libdir \
         --with-php-config=/usr/bin/php-config$_phpver
 
-  local jobs=$(($(nproc)+1))
-  make -j$jobs
+    local jobs=$(($(nproc)+1))
+    make -j$jobs
 }
 
 check() {
@@ -58,7 +58,7 @@ package() {
 
 	make INSTALL_ROOT="$pkgdir" install
 	install -d "$pkgdir/$_config_dir"
-	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
+    printf "; priority=20\nextension=$_pkgreal.so\n" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="7f56816553894849b539233209c57df9f9239ddc8a172c924a1f72c57ba474228e6f82779787a40ed1d78cac890dcd3d49bbb1aa2f7d4c29b95ae9809c836141  ast-1.0.5.tgz"
+sha512sums="3c2a7a4ee90d53f2a3c02dad7455a28c63cdac50353b33ee1f62f371661e4bbbc8d97636df63a07d6dc20fc0c8e0106531568c21f37617e8dbc0a526d039c26c  libsodium-2.0.22.tgz"

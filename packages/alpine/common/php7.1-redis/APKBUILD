@@ -19,7 +19,7 @@ srcdir="/tmp/$pkgname-$pkgver"
 builddir="$srcdir/$_pkgreal-$pkgver"
 _libdir="/usr/lib/php/$_phpver"
 _extension_dir="$_libdir/modules"
-_extension_confd="/etc/php/$_phpver/conf.d"
+_config_dir="/etc/php/$_phpver/conf.d"
 
 prepare() {
     default_prepare
@@ -30,12 +30,14 @@ build() {
 
     cd "$builddir"
 
-    phpize
+    phpize$_phpver
 
 	EXTENSION_DIR=$_extension_dir \
     ./configure \
         --prefix=/usr \
-        --with-php-config=/usr/bin/php-config
+		--libdir=$_libdir \
+        --with-php-config=/usr/bin/php-config$_phpver \
+		--enable-redis-igbinary
 
   local jobs=$(($(nproc)+1))
   make -j$jobs
@@ -49,9 +51,9 @@ check() {
 package() {
 	cd "$builddir"
 
-	make INSTALL_ROOT="$pkgdir"/ install
-	install -d "$pkgdir"/etc/php/$_phpver/conf.d
-	echo "extension=$_pkgreal.so" > "$pkgdir"/$_extension_confd/03_$_pkgreal.ini
+	make INSTALL_ROOT="$pkgdir" install
+	install -d "$pkgdir/$_config_dir"
+	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
 sha512sums="eb6aa538d2ae4115634fd5841e3ccccf788cad13b99e0485fb2af43def85e93328012e5cef66d1be4bdd494be6f68de329a066e41b710e434f94f3ed3401bfee  redis-5.1.1.tgz"

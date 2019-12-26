@@ -53,7 +53,7 @@ srcdir="/tmp/php-$pkgver"
 builddir="$srcdir/php-$pkgver"
 _libdir="/usr/lib/php/$_phpver"
 _extension_dir="$_libdir/modules"
-_extension_confd="/etc/php/$_phpver/conf.d"
+_config_dir="/etc/php/$_phpver/conf.d"
 _extensions="
 	bcmath bz2 calendar ctype curl dba dom enchant exif fileinfo
 	ftp gd gettext gmp iconv imap intl json ldap mbstring mcrypt
@@ -192,7 +192,7 @@ _build() {
 		--localstatedir=/var \
 		--with-layout=GNU \
 		--with-config-file-path=/etc/php/$_phpver \
-		--with-config-file-scan-dir=$_extension_confd \
+		--with-config-file-scan-dir=$_config_dir \
 		--with-pic \
 		--with-pear=/usr/share/php/$_phpver \
 		--disable-short-tags \
@@ -532,9 +532,9 @@ _extension() {
 	_mv "$pkgdir"/$_extension_dir/$extname.so \
 		"$subpkgdir"/$_extension_dir/
 
-	mkdir -p "$subpkgdir"/$_extension_confd
+	mkdir -p "$subpkgdir"/$_config_dir
 	echo "${prefix}extension=$extname.so" \
-		> "$subpkgdir"/$_extension_confd/$(printf %02d $load_order)_$extname.ini
+		> "$subpkgdir"/$_config_dir/$(printf %02d $load_order)_$extname.ini
 }
 
 # Resolves dependencies of the given extension name (without $pkgname- prefix)
