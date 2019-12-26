@@ -32,9 +32,16 @@ provides="$pkgname-cli $pkgname-zlib"
 source="https://php.net/distributions/php-$pkgver.tar.bz2
 	php${_phpver:0:1}-fpm.initd
 	php${_phpver:0:1}-fpm.logrotate
-    php${_phpver:0:1}-fpm.post-install
-    php${_phpver:0:1}-fpm.pre-install
 	php${_phpver:0:1}-module.conf
+    php$_phpver-cgi.post-install
+    php$_phpver-dev.post-install
+    php$_phpver-fpm.post-install
+    php$_phpver-fpm.pre-install
+    php$_phpver-litespeed.post-install
+    php$_phpver-pear.post-install
+    php$_phpver-phar.post-install
+    php$_phpver-phpdbg.post-install
+    php$_phpver.post-install
 	allow-build-recode-and-imap-together.patch
 	disabled-tests.list
 	fix-tests-devserver.patch
@@ -271,7 +278,7 @@ _build() {
 		--enable-zip=shared \
 			--with-libzip=/usr \
 		--with-zlib \
-		--with-zlib-dir=/usr \
+		    --with-zlib-dir=/usr \
 		$@
 
 	make
@@ -330,6 +337,7 @@ check() {
 
 package() {
     replaces="php php7"
+    install="$pkgname.post-install"
 
 	cd "$builddir"
 
@@ -362,15 +370,12 @@ package() {
     # Clean
 	find "$pkgdir" -name '.*' | xargs rm -rf
 	rmdir "$pkgdir"/var/run
-
-	if [ "$_default_php" = yes ]; then
-		ln -s php$_phpver "$pkgdir"/usr/bin/php
-	fi
 }
 
 dev() {
 	default_dev
     replaces="php-dev php7-dev"
+    install="$pkgname-dev.post-install"
 
 	cd "$pkgdir"
 
@@ -379,11 +384,6 @@ dev() {
 		"$subpkgdir"/usr/bin/
 
 	_mv ./$_libdir/build "$subpkgdir"/$_libdir/
-
-	if [ "$_default_php" = yes ]; then
-		ln -s php-config$_phpver "$subpkgdir"/usr/bin/php-config
-		ln -s phpize$_phpver "$subpkgdir"/usr/bin/phpize
-	fi
 }
 
 doc() {
@@ -413,13 +413,10 @@ apache2() {
 phpdbg() {
 	pkgdesc="Interactive PHP$_phpver debugger"
     replaces="php-phpdbg php7-phpdbg"
+    install="$pkgname-phpdbg.post-install"
 
 	install -Dm755 "$builddir"/sapi/phpdbg/phpdbg \
 		"$subpkgdir"/usr/bin/phpdbg$_phpver
-
-	if [ "$_default_php" = yes ]; then
-		ln -s phpdbg$_phpver "$subpkgdir"/usr/bin/phpdbg
-	fi
 }
 
 embed() {
@@ -433,31 +430,25 @@ litespeed() {
 	pkgdesc="PHP$_phpver LiteSpeed SAPI"
     depends="$depends $pkgname-bcmath $pkgname-json $pkgname-session"
     replaces="php-litespeed php7-litespeed"
+    install="$pkgname-litespeed.post-install"
 
 	mkdir -p "$subpkgdir"/usr/bin
 
 	mv "$pkgdir"/usr/bin/lsphp$_phpver "$subpkgdir"/usr/bin
-
-	if [ "$_default_php" = yes ]; then
-		ln -s lsphp$_phpver "$subpkgdir"/usr/bin/lsphp
-	fi
 }
 
 cgi() {
 	pkgdesc="PHP$_phpver Common Gateway Interface"
     replaces="php-cgi php7-cgi"
+    install="$pkgname-cgi.post-install"
 
 	_mv "$pkgdir"/usr/bin/php-cgi$_phpver "$subpkgdir"/usr/bin/
-
-	if [ "$_default_php" = yes ]; then
-		ln -s php-cgi$_phpver "$subpkgdir"/usr/bin/php-cgi
-	fi
 }
 
 fpm() {
 	pkgdesc="PHP$_phpver FastCGI Process Manager"
     replaces="php-fpm php7-fpm"
-    install="php${_phpver:0:1}-fpm.pre-install php${_phpver:0:1}-fpm.post-install"
+    install="$pkgname-fpm.pre-install $pkgname-fpm.post-install"
 
 	cd "$pkgdir"
 
@@ -473,16 +464,13 @@ fpm() {
 		"$subpkgdir"/etc/logrotate.d/php-fpm$_phpver
 
 	mkdir -p "$subpkgdir"/var/log/php/$_phpver
-
-	if [ "$_default_php" = yes ]; then
-		ln -s php-fpm$_phpver "$subpkgdir"/usr/sbin/php-fpm
-	fi
 }
 
 pear() {
 	pkgdesc="PHP$_phpver Extension and Application Repository"
 	depends="$pkgname $pkgname-xml"
     replaces="php-pear php7-pear"
+    install="$pkgname-pear.post-install"
 
 	cd "$pkgdir"
 
@@ -493,9 +481,6 @@ pear() {
 	mkdir -p "$subpkgdir"/usr/bin
 	local file; for file in pecl pear peardev; do
 		mv usr/bin/$file "$subpkgdir"/usr/bin/$file$_phpver
-		if [ "$_default_php" = yes ]; then
-			ln -s $file$_phpver "$subpkgdir"/usr/bin/$file
-		fi
 	done
 
 	_mv etc/php/$_phpver/pear.conf "$subpkgdir"/etc/php/$_phpver/
@@ -511,12 +496,13 @@ common() {
 
 	_mv usr/lib "$subpkgdir"/usr/
 	_mv etc "$subpkgdir"/
-	mkdir -p "$subpkgdir"/$_extension_confd
+	mkdir -p "$subpkgdir"/$_config_dir
 }
 
 phar() {
 	_extension
     replaces="php-phar php7-phar"
+    install="$pkgname-phar.post-install"
 
 	cd "$pkgdir"
 
@@ -525,11 +511,6 @@ phar() {
 
 	rm usr/bin/phar
 	ln -s phar.phar$_phpver "$subpkgdir"/usr/bin/phar$_phpver
-
-	if [ "$_default_php" = yes ]; then
-		ln -s phar.phar$_phpver "$subpkgdir"/usr/bin/phar.phar
-		ln -s phar.phar$_phpver "$subpkgdir"/usr/bin/phar
-	fi
 }
 
 _extension() {
@@ -611,12 +592,19 @@ _mv() {
 sha512sums="60ecf04a5fcb77ad839f5c5514f0d83e16aa9d3cc5250a428ff6cb43defc9d1626bdb5b5ea2671261cc273c51c18387d6267307e28c25d18ca98b212cec7cc99  php-7.1.33.tar.bz2
 d55f7d014c3a42a09ca2fa771411e516950c7f60c1cac0828368d70300be1bf60e73c7d3d75dcabd7420a464470ec6378311a2425ae478461eb3be0e53a89703  php7-fpm.initd
 b00400931dd9e3f050329bed355bada45923dcc2dc01637812a6e03bcadad7d428b342cc47ab487220904ecd70775b15fb53c19b44ddb45b9f92a8ba7a05646b  php7-fpm.logrotate
-774f086974daa223b2a84ce39406c302ef4da11efb259d129d8daa2dd3e873fa44168026703f9cee9ae538073e608aa72142fd75d036ad193e7861d2fc1aa7be  php7-fpm.post-install
-0197cf9c7e884805045883e24fa302a44a7dc23e1337e5d2df0404984991f9a4b754a5a6bd649ef48f0dc4ebb6b3bd16af74e638e65db0fa37ee30946ee67750  php7-fpm.pre-install
 274bd7b0b2b7002fa84c779640af37b59258bb37b05cb7dd5c89452977d71807f628d91b523b5039608376d1f760f3425d165242ca75ee5129b2730e71c4e198  php7-module.conf
+fac4a41976b4a24281310db99cbf532a92c35e82d59a34c28f5feb66b72617f7e89af856d26741022b55ea6933a2118a9b6637c9b3b636aa1be2037380377633  php7.1-cgi.post-install
+f10041405bbade8bae1fb48ad721ed82d77127d8d10356f31c09bd17b39915fe5c901a46524c94165e9fd69bff85b9942fcaba7ab4a580e869e768cab0aa7a04  php7.1-dev.post-install
+e49dc2ba2c0f8135c8b9e8d1e6fc3ee711da62d5d63934b8eeb17744932e0540d7d052971437afc54b007a82a4f7bf9eeb8fd2388c3a694a053da7d62cb75b21  php7.1-fpm.post-install
+0197cf9c7e884805045883e24fa302a44a7dc23e1337e5d2df0404984991f9a4b754a5a6bd649ef48f0dc4ebb6b3bd16af74e638e65db0fa37ee30946ee67750  php7.1-fpm.pre-install
+1cf344487adc9c671236f82eb0cdaaf5a822a1c2fcbfdc226f6d86438dadeb65006d2fe9b268d3b61b29f15d4804c71e5deeb785e50c9e22f2518aa875f5a753  php7.1-litespeed.post-install
+0e728fd1af074d42391dbf9687878817d9114ea8f3727cb244fa0566c4cdb97485bd6ccff576eac9050d46b52ed16225741e23d6490fac242ae96af2dddf43f2  php7.1-pear.post-install
+66054813dec89e16b3ec2bb0c33b317463284bde13bd37b40c28289ae178efce53f027a719e9b51f059ab5554b27e5ca51b78222cb3d8198b4e51083da3ebb80  php7.1-phar.post-install
+a69317c795597416ceb3bc55b332e9f8f9a400048a62c74cc151d328d653932060b7ef6268b3fe3fb6b2e7f58d0ea621a6c50dace9d9c13bebdd12e93fd1b4bc  php7.1-phpdbg.post-install
+c4d5f2ed87512ac4eb7daafde04e308dcd0a1401d728c7ffe3f82f1b5adfa6a526072562ef2498cef0be06f346f011b7b4c3a28cbb688e1cf8e4073884d6b5e2  php7.1.post-install
 582ac7e7a05c856115156460882158b12cfaa4db5d6393dbef76a620923a0173b56928d7d4092d9087bed5b0938e10de97d7cc42204cd62c1fe8e7ec32d87dff  allow-build-recode-and-imap-together.patch
 f2c980bf296d9db074196372cbb91b4a81138e25c13f15bab4dd19839209e95f6e0225d89e3105bbf99676818440f31f3cff56bb87d8eb58b6b4ebaf99cfe962  disabled-tests.list
 294fa2816a58c4b8b511a52e603f8678402237af31ff36783544a9ceca8a02774ad7f0f12e000e467aad4efa1488c596cfd30ff83abfaae627068cbe6055cd67  fix-tests-devserver.patch
-d09add3f1524eed753405a5688dbbfa0a369196065a02b5b43d096458adb9128cdc5466a4732fef8909b55a20d92087ac0f4d816f8e0743a410c05f1010d7dfc  includedir.patch
+a8c3f79f4c122c6567f329d6c9781febd5c02706b2891215c2b64b946cf75bddbb82c16ef92b8a39911e18f374bb3ba0612b9c7c04fea739aa4363785dba5205  includedir.patch
 be837619b9f7f065401816cc450f46bea95bdb6328c4651ac131b3677b50f823a516392893c447c8452f090c6f33146930a5027b25a6dd949e46cf85f2eceba2  install-pear.patch
 94987222778f744de2652465e86d47c0b86fa8a9d7853937fcd2ca00167cff769d01ba8e98e3db8980c26e6e9951f23a218285b1bf093b24b7f353bc094ee1ea  php7-fpm-version-suffix.patch"
