@@ -16,7 +16,6 @@ makedepends=""
 srcdir="/tmp/$pkgname-$pkgver"
 builddir="$srcdir/$pkgname-$pkgver"
 options="!check"
-install_if="phpunit"
 
 package() {
   mkdir -p "$pkgdir"
