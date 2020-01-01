@@ -15,7 +15,7 @@ source="$pkgname-$pkgver.phar::https://getcomposer.org/download/$pkgver/$pkgname
 srcdir="/tmp/$pkgname-$pkgver"
 builddir="$srcdir/$pkgname-$pkgver"
 options="!check"
-install_if="php7.1-composer php7.2-composer"
+install_if="php7.1-composer php7.2-composer php7.3-composer"
 
 package() {
     install -m 0755 -D "$srcdir"/$pkgname-$pkgver.phar "$pkgdir"/usr/bin/$pkgname

@@ -71,6 +71,12 @@ shell: ## Get a command prompt inside the container
 	@# get the prompt
 	@$(MAKE) run v=$(version) c=bash
 
+fetch: ## Force public folder update from gh-pages
+	cd $(DIR)/public \
+	&& git fetch --all \
+	&& git reset --hard origin/gh-pages \
+	&& git pull origin gh-pages
+
 deploy: ## Deploy built packages to gh-pages
 	@# -- check if token is defined
 	@test "$(token)"
@@ -87,3 +93,6 @@ deploy: ## Deploy built packages to gh-pages
 clean: ## Clean the workspace
 	@rm -rf $(DIR)/packages/alpine/*/pkg
 	@rm -rf $(DIR)/packages/alpine/*/*/pkg
+
+# All in one line
+# make fetch && sleep 5 && make package-all v=3.7 && sleep 5 && make package-all v=3.8 && sleep 5 &&  make package-all v=3.9 && sleep 5 &&  make package-all v=3.10

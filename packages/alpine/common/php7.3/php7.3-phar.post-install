@@ -1,0 +1,6 @@
+#!/bin/sh
+
+_phpver=7.3
+
+ln -sf /usr/bin/phar.phar$_phpver /usr/bin/phar.phar
+ln -sf /usr/bin/phar$_phpver /usr/bin/phar

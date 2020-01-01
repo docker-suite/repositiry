@@ -1,0 +1,7 @@
+#!/bin/sh
+
+_phpver=7.3
+
+for file in pecl pear peardev; do
+    ln -sf /usr/bin/$file$_phpver /usr/bin/$file
+done

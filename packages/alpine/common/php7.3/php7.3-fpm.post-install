@@ -1,0 +1,8 @@
+#!/bin/sh
+
+_phpver=7.3
+
+mkdir -p /run/php /run/php-fpm/$_phpver
+
+ln -sf /usr/sbin/php-fpm$_phpver /usr/sbin/php-fpm
+ln -sf /run/php-fpm/$_phpver/php-fpm.sock /run/php/php-fpm.sock

@@ -1,0 +1,22 @@
+# Maintainer: Hexosse <hexosse@gmail.com>
+
+pkgname=php7.3-phpunit
+pkgver=1.0.0
+pkgrel=0
+_phpver=7.3
+_php=php$_phpver
+
+pkgdesc="The PHP Unit Testing framework"
+url="https://phpunit.de/"
+arch="noarch"
+license="BSD 3 Clause"
+
+depends="phpunit $_php $_php-phar $_php-json $_php-mbstring $_php-openssl $_php-dom $_php-xml"
+makedepends=""
+srcdir="/tmp/$pkgname-$pkgver"
+builddir="$srcdir/$pkgname-$pkgver"
+options="!check"
+
+package() {
+  mkdir -p "$pkgdir"
+}

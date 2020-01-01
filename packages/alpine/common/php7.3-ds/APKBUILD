@@ -1,0 +1,64 @@
+# Maintainer: Hexosse <hexosse@gmail.com>
+
+pkgname=php7.3-ds
+pkgver=1.2.9
+pkgrel=0
+_pkgreal=ds
+_phpver=7.3
+_php=php$_phpver
+
+pkgdesc="Data Structures for PHP 7"
+url="https://pecl.php.net/package/$_pkgreal"
+arch="all"
+license="MIT"
+
+depends="$_php-common $_php-json"
+makedepends="$_php-dev composer $_php-dom $_php-tokenizer valgrind"
+source="https://pecl.php.net/get/$_pkgreal-$pkgver.tgz"
+srcdir="/tmp/$pkgname-$pkgver"
+builddir="$srcdir/$_pkgreal-$pkgver"
+_libdir="/usr/lib/php/$_phpver"
+_extension_dir="$_libdir/modules"
+_config_dir="/etc/php/$_phpver/conf.d"
+
+prepare() {
+    default_prepare
+}
+
+build() {
+    replaces="php-ds php${_phpver:0:1}-ds"
+
+    cd "$builddir"
+
+    phpize$_phpver
+
+	EXTENSION_DIR=$_extension_dir \
+    ./configure \
+        --prefix=/usr \
+		--libdir=$_libdir \
+        --with-php-config=/usr/bin/php-config$_phpver
+
+  local jobs=$(($(nproc)+1))
+  make -j$jobs
+}
+
+check() {
+    cd "$builddir"
+
+    local allow_fail='yes'
+
+    NO_INTERACTION=1 REPORT_EXIT_STATUS=1 \
+    SKIP_SLOW_TESTS=1 SKIP_ONLINE_TESTS=1 TEST_TIMEOUT=10 \
+    TZ= LANG= LC_ALL= \
+    make test || [ "$allow_fail" = yes ]
+}
+
+package() {
+	cd "$builddir"
+
+	make INSTALL_ROOT="$pkgdir" install
+	install -d "$pkgdir/$_config_dir"
+	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
+}
+
+sha512sums="73107fedd4515e5f7fbb761d19a9f9b472ad42771c1cc817ca4fc24fff1f070ce39cd59745d3a05a170d7327eea030cc85e7fb7a7caa3f3ff9b1eba19a159b86  ds-1.2.9.tgz"

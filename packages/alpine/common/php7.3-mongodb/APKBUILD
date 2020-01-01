@@ -1,0 +1,65 @@
+# Maintainer: Hexosse <hexosse@gmail.com>
+
+pkgname=php7.3-mongodb
+pkgver=1.6.1
+pkgrel=0
+_pkgreal=mongodb
+_phpver=7.3
+_php=php$_phpver
+
+pkgdesc="MongoDB driver for PHP"
+url="https://pecl.php.net/package/$_pkgreal"
+arch="all"
+license="Apache"
+
+depends="$_php-common $_php-json"
+makedepends="$_php-dev libressl-dev pcre-dev bash"
+source="https://pecl.php.net/get/$_pkgreal-$pkgver.tgz"
+srcdir="/tmp/$pkgname-$pkgver"
+builddir="$srcdir/$_pkgreal-$pkgver"
+_libdir="/usr/lib/php/$_phpver"
+_extension_dir="$_libdir/modules"
+_config_dir="/etc/php/$_phpver/conf.d"
+options="!check"
+
+prepare() {
+    default_prepare
+}
+
+build() {
+    replaces="php-mongodb php${_phpver:0:1}-mongodb"
+
+    cd "$builddir"
+
+    phpize$_phpver
+
+	EXTENSION_DIR=$_extension_dir \
+    ./configure \
+        --prefix=/usr \
+		--libdir=$_libdir \
+        --with-php-config=/usr/bin/php-config$_phpver
+
+  local jobs=$(($(nproc)+1))
+  make -j$jobs
+}
+
+check() {
+    cd "$builddir"
+
+    local allow_fail='yes'
+
+    NO_INTERACTION=1 REPORT_EXIT_STATUS=1 \
+    SKIP_SLOW_TESTS=1 SKIP_ONLINE_TESTS=1 TEST_TIMEOUT=10 \
+    TZ= LANG= LC_ALL= \
+    make test || [ "$allow_fail" = yes ]
+}
+
+package() {
+	cd "$builddir"
+
+	make INSTALL_ROOT="$pkgdir" install
+	install -d "$pkgdir/$_config_dir"
+	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
+}
+
+sha512sums="cc5e3c79f7af1cd7e3f661dd1b7f69be174b7f8acca13cfa2115d8d200680e8e665649e576742a01311b9b1d4a548442e55367bcb1435a080dbf34138205c945  mongodb-1.6.1.tgz"
