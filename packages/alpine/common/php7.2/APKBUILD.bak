@@ -329,7 +329,7 @@ package() {
 
     # Install to pkgdir
     local jobs=$(($(nproc)+1))
-	make -j$jobs INSTALL_ROOT="$pkgdir" install
+	make -j $jobs INSTALL_ROOT="$pkgdir" install
 
     #
 	install -Dm644 php.ini-production "$pkgdir"/etc/php/$_phpver/php.ini

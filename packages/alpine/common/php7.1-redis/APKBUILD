@@ -32,15 +32,26 @@ build() {
 
     phpize$_phpver
 
+    # Apply stack smash protection to functions using local buffers and alloca()
+    # Make PHP's main executable position-independent (improves ASLR security mechanism, and has no performance impact on x86_64)
+    # Enable optimization (-O2)
+    # Enable linker optimization (this sorts the hash buckets to improve cache locality, and is non-default)
+    # Adds GNU HASH segments to generated executables (this is used if present, and is much faster than sysv hash; in this configuration, sysv hash is also generated)
+    # https://github.com/docker-library/php/issues/272
+    # -D_LARGEFILE_SOURCE and -D_FILE_OFFSET_BITS=64 (https://www.php.net/manual/en/intro.filesystem.php)
+
 	EXTENSION_DIR=$_extension_dir \
+    CFLAGS="-fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64" \
+    CPPFLAGS="$CFLAGS" \
+    LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie" \
     ./configure \
         --prefix=/usr \
 		--libdir=$_libdir \
         --with-php-config=/usr/bin/php-config$_phpver \
 		--enable-redis-igbinary
 
-  local jobs=$(($(nproc)+1))
-  make -j$jobs
+    local jobs=$(($(nproc)+1))
+    make -j $jobs
 }
 
 check() {
