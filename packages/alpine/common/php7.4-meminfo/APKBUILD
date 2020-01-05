@@ -1,0 +1,79 @@
+# Maintainer: Hexosse <hexosse@gmail.com>
+
+pkgname=php7.4-meminfo
+pkgver=1.0.6
+pkgrel=0
+_pkgreal=meminfo
+_phpver=7.4
+_php=php$_phpver
+
+pkgdesc="NO VERSIONS COMPATIBLE WITH PHP 7.4: PHP extension to get insight about memory usage"
+url="https://github.com/BitOne/php-meminfo"
+arch="all"
+license="MIT"
+
+depends="$_php-common"
+makedepends="$_php-dev"
+# source="$_pkgreal-$pkgver.tar.gz::https://github.com/BitOne/php-meminfo/archive/v$pkgver.tar.gz"
+srcdir="/tmp/$pkgname-$pkgver"
+builddir="$srcdir/php-$_pkgreal-$pkgver"
+_libdir="/usr/lib/php/$_phpver"
+_extension_dir="$_libdir/modules"
+_config_dir="/etc/php/$_phpver/conf.d"
+
+prepare() {
+    default_prepare
+}
+
+# build() {
+#     replaces="php-meminfo php${_phpver:0:1}-meminfo"
+
+#     cd "$builddir/extension/php7"
+
+#     phpize$_phpver
+
+#     # Apply stack smash protection to functions using local buffers and alloca()
+#     # Make PHP's main executable position-independent (improves ASLR security mechanism, and has no performance impact on x86_64)
+#     # Enable optimization (-O2)
+#     # Enable linker optimization (this sorts the hash buckets to improve cache locality, and is non-default)
+#     # Adds GNU HASH segments to generated executables (this is used if present, and is much faster than sysv hash; in this configuration, sysv hash is also generated)
+#     # https://github.com/docker-library/php/issues/272
+#     # -D_LARGEFILE_SOURCE and -D_FILE_OFFSET_BITS=64 (https://www.php.net/manual/en/intro.filesystem.php)
+
+# 	EXTENSION_DIR=$_extension_dir \
+#     CFLAGS="-fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64" \
+#     CPPFLAGS="$CFLAGS" \
+#     LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie" \
+#     ./configure \
+#         --prefix=/usr \
+# 		--libdir=$_libdir \
+#         --with-php-config=/usr/bin/php-config$_phpver \
+#         --enable-meminfo
+
+#     local jobs=$(($(nproc)+1))
+#     make -j $jobs
+# }
+
+# check() {
+#     cd "$builddir/extension/php7"
+
+#     local allow_fail='yes'
+
+#     NO_INTERACTION=1 REPORT_EXIT_STATUS=1 \
+#     SKIP_SLOW_TESTS=1 SKIP_ONLINE_TESTS=1 TEST_TIMEOUT=10 \
+#     TZ= LANG= LC_ALL= \
+#     make test || [ "$allow_fail" = yes ]
+# }
+
+# package() {
+#     cd "$builddir/extension/php7"
+
+# 	make INSTALL_ROOT="$pkgdir" install
+# 	install -d "$pkgdir/$_config_dir"
+# 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
+# }
+
+package() {
+  mkdir -p "$pkgdir"
+}
+

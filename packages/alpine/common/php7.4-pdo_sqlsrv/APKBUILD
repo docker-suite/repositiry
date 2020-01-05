@@ -1,0 +1,77 @@
+# Maintainer: Hexosse <hexosse@gmail.com>
+
+pkgname=php7.4-pdo_sqlsrv
+pkgver=5.7.1
+pkgrel=0
+_pkgverreal=${pkgver}preview
+_pkgreal=pdo_sqlsrv
+_phpver=7.4
+_php=php$_phpver
+
+pkgdesc="pdo_sqlsrv-1.1 parser and emitter"
+url="https://pecl.php.net/package/$_pkgreal"
+arch="all"
+license="MIT"
+
+depends="$_php-common $_php-sqlsrv"
+makedepends="$_php-dev"
+source="$_pkgreal-${pkgver}preview.tgz::https://pecl.php.net/get/$_pkgreal-$_pkgverreal.tgz"
+srcdir="/tmp/$pkgname-$_pkgverreal"
+builddir="$srcdir/$_pkgreal-$_pkgverreal"
+_libdir="/usr/lib/php/$_phpver"
+_extension_dir="$_libdir/modules"
+_config_dir="/etc/php/$_phpver/conf.d"
+install_if="$_phpver-sqlsrv"
+
+prepare() {
+    default_prepare
+}
+
+build() {
+    replaces="php-pdo_sqlsrv php${_phpver:0:1}-pdo_sqlsrv"
+
+    cd "$builddir"
+
+    phpize$_phpver
+
+    # Apply stack smash protection to functions using local buffers and alloca()
+    # Make PHP's main executable position-independent (improves ASLR security mechanism, and has no performance impact on x86_64)
+    # Enable optimization (-O2)
+    # Enable linker optimization (this sorts the hash buckets to improve cache locality, and is non-default)
+    # Adds GNU HASH segments to generated executables (this is used if present, and is much faster than sysv hash; in this configuration, sysv hash is also generated)
+    # https://github.com/docker-library/php/issues/272
+    # -D_LARGEFILE_SOURCE and -D_FILE_OFFSET_BITS=64 (https://www.php.net/manual/en/intro.filesystem.php)
+
+	EXTENSION_DIR=$_extension_dir \
+    CFLAGS="-fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64" \
+    CPPFLAGS="$CFLAGS" \
+    LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie" \
+    ./configure \
+        --prefix=/usr \
+		--libdir=$_libdir \
+        --with-php-config=/usr/bin/php-config$_phpver
+
+    local jobs=$(($(nproc)+1))
+    make -j $jobs
+}
+
+check() {
+    cd "$builddir"
+
+    local allow_fail='yes'
+
+    NO_INTERACTION=1 REPORT_EXIT_STATUS=1 \
+    SKIP_SLOW_TESTS=1 SKIP_ONLINE_TESTS=1 TEST_TIMEOUT=10 \
+    TZ= LANG= LC_ALL= \
+    make test || [ "$allow_fail" = yes ]
+}
+
+package() {
+	cd "$builddir"
+
+	make INSTALL_ROOT="$pkgdir" install
+	install -d "$pkgdir/$_config_dir"
+    printf "; priority=30\nextension=$_pkgreal.so\n" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
+}
+
+sha512sums="f9e059fc76985f241cc03b6d1e00c451aec5af8585744ba5e4797fb18677b6611de37bf3d1260b55ca75b9e99099cf82cd91dfb8b490e1c9fd627a499bbd2f8e  pdo_sqlsrv-5.7.1preview.tgz"

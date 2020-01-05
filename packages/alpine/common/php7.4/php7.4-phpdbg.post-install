@@ -1,0 +1,5 @@
+#!/bin/sh
+
+_phpver=7.4
+
+ln -sf /usr/bin/php$_phpver /usr/bin/php
