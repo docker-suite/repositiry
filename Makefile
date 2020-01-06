@@ -2,7 +2,7 @@
 DIR:=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
 
 ## Define the default version to package
-default = 3.10
+default = 3.11
 
 ##
 .DEFAULT_GOAL := help
@@ -14,7 +14,7 @@ help:
 	@printf "\033[33mUsage:\033[0m\n  make [target] [arg=\"val\"...]\n\n\033[33mTargets:\033[0m\n"
 	@grep -E '^[-a-zA-Z0-9_\.\/]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[32m%-15s\033[0m %s\n", $$1, $$2}'
 
-run: ## Run a command in a new Docker container: make run v=[3.7|3.8|3.9|3.10] c=[...]
+run: ## Run a command in a new Docker container: make run v=[3.7|3.8|3.9|3.10|3.11] c=[...]
 	@# -- use default version if v is not specified
 	@$(eval version := $(or $(v),$(default)))
 	@# -- make sure /config folder exist on host
@@ -31,7 +31,7 @@ run: ## Run a command in a new Docker container: make run v=[3.7|3.8|3.9|3.10] c
 		-w /packages/$(version) \
 		dsuite/apk-builder-dev:$(version) $(c)
 
-package: ## Build a specific package: make package v=[3.7|3.8|3.9|3.10] p=[<package-name1> <package-name2>]
+package: ## Build a specific package: make package v=[3.7|3.8|3.9|3.10|3.11] p=[<package-name1> <package-name2>]
 	@# -- use default version if v is not specified
 	@$(eval version := $(or $(v),$(default)))
 	@# -- make sure a package a specified
@@ -95,4 +95,4 @@ clean: ## Clean the workspace
 	@rm -rf $(DIR)/packages/alpine/*/*/pkg
 
 # All in one line
-# make fetch && sleep 5 && make package-all v=3.7 && sleep 5 && make package-all v=3.8 && sleep 5 &&  make package-all v=3.9 && sleep 5 &&  make package-all v=3.10
+# make fetch && sleep 5 && make package-all v=3.7 && sleep 5 && make package-all v=3.8 && sleep 5 &&  make package-all v=3.9 && sleep 5 &&  make package-all v=3.10 && sleep 5 &&  make package-all v=3.11

@@ -12,7 +12,7 @@ On Alpine Linux add [docker-suite (dsuite)][docker-suite] repository and make it
 ```
     apk add --no-cache curl ca-certificates \
     && curl -o /etc/apk/keys/docker-suite.rsa.pub https://docker-suite.github.io/repository/docker-suite.rsa.pub \
-    && echo "https://docker-suite.github.io/repository/v3.10" >> /etc/apk/repositories
+    && echo "https://docker-suite.github.io/repository/v3.11" >> /etc/apk/repositories
 ```
 
 [alpine]: http://alpinelinux.org/
