@@ -1,8 +1,7 @@
 # ![](https://github.com/docker-suite/artwork/raw/master/logo/png/logo_32.png) repository
-[![Build Status](http://jenkins.hexocube.fr/job/docker-suite/job/repository/badge/icon?color=green&style=flat-square)](http://jenkins.hexocube.fr/job/docker-suite/job/repository/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-brightgreen.svg?style=flat-square)](https://opensource.org/licenses/MIT)
 
-[Alpine][alpine] repository for [docker-suite (dsuite)][docker-suite] images.
+[Alpine][alpine] package repository for [docker-suite (dsuite)][docker-suite] images.
 
 
 ## ![](https://github.com/docker-suite/artwork/raw/master/various/pin/png/pin_16.png) Quick usage
