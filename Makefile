@@ -96,7 +96,7 @@ deploy: ## Deploy built packages to bintray
 		docker.bintray.io/jfrog/jfrog-cli-go:latest bash -c " echo 'Starting publishing to bintray' \
 			; jfrog bt config --user $$BINTRAY_USERNAME --key $$BINTRAY_API_KEY --licenses MIT \
 			; jfrog bt upload --override --publish \"/public/*.pub\" docker-suite/alpine/public/1.0 \
-			; jfrog bt upload --override --publish \"/public/v$(version)/x86_64/*.apk\" docker-suite/alpine/public/1.0 v$(version)/x86_64/ \
+			; jfrog bt upload --override --publish \"/public/v$(version)/x86_64/*\" docker-suite/alpine/public/1.0 v$(version)/x86_64/ \
 			; echo End of publishing"
 
 clean: ## Clean the workspace
