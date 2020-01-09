@@ -10,8 +10,8 @@ On Alpine Linux add [docker-suite (dsuite)][docker-suite] repository and make it
 
 ```
     apk add --no-cache curl ca-certificates \
-    && curl -o /etc/apk/keys/docker-suite.rsa.pub https://dl.bintray.com/docker-suite/alpine/docker-suite.rsa.pub \
-    && echo "https://dl.bintray.com/docker-suite/alpine/v3.11" >> /etc/apk/repositories
+    && curl -o /etc/apk/keys/docker-suite.rsa.pub https://repo.hexocube.fr/alpine/docker-suite.rsa.pub \
+    && echo "https://repo.hexocube.fr/alpine/v3.11" >> /etc/apk/repositories
 ```
 
 [alpine]: http://alpinelinux.org/
