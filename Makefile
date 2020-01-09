@@ -2,10 +2,7 @@
 DIR:=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
 
 ## Define the default version to package
-default = 3.11
-
-## include environnement variables
--include .env
+default = 3.10
 
 ##
 .DEFAULT_GOAL := help
@@ -17,7 +14,7 @@ help:
 	@printf "\033[33mUsage:\033[0m\n  make [target] [arg=\"val\"...]\n\n\033[33mTargets:\033[0m\n"
 	@grep -E '^[-a-zA-Z0-9_\.\/]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[32m%-15s\033[0m %s\n", $$1, $$2}'
 
-run: ## Run a command in a new Docker container: make run v=[3.7|3.8|3.9|3.10|3.11] c=[...]
+run: ## Run a command in a the docker apk-builder container: make run v=[3.7|3.8|3.9|3.10|3.11] c=[...]
 	@# -- use default version if v is not specified
 	@$(eval version := $(or $(v),$(default)))
 	@# -- make sure /config folder exist on host
@@ -42,7 +39,13 @@ package: ## Build a specific package: make package v=[3.7|3.8|3.9|3.10|3.11] p=[
 	@# -- run the package command
 	@$(MAKE) run v=$(version) c="package -p \"$(p)\""
 
-dependency: ## Create a package dependency: make dependency v=3.7 p=php7.1 d=composer
+packages: ## Build all packages: make packages v=[3.7|3.8|3.9|3.10|3.11]
+	@# use default version if v is not specified
+	@$(eval version := $(or $(v),$(default)))
+	@# Build all packages
+	@$(MAKE) run v=$(version) c=package
+
+dependency: ## Create a package dependency: make dependency v=3.7 -p=php7.1 -d=composer
 	@# -- use default version if v is not specified
 	@$(eval version := $(or $(v),$(default)))
 	@# -- make sure a package and dependensy are specified
@@ -62,25 +65,7 @@ dependency: ## Create a package dependency: make dependency v=3.7 p=php7.1 d=com
 		-v $(DIR)/packages/alpine/v$(version):/packages \
 		dsuite/apk-builder-dev:$(version) bash -c "dependency -p $(p) -d \"$(d)\""  > /dev/null || true
 
-package-all: ## Build all packages for all versions
-	@# use default version if v is not specified
-	@$(eval version := $(or $(v),$(default)))
-	@# Build all packages
-	@$(MAKE) run v=$(version) c=package
-
-shell: ## Get a command prompt inside the container
-	@# use default version if v is not specified
-	@$(eval version := $(or $(v),$(default)))
-	@# get the prompt
-	@$(MAKE) run v=$(version) c=bash
-
-fetch: ## Force public folder update from gh-pages
-	cd $(DIR)/public \
-	&& git fetch --all \
-	&& git reset --hard origin/gh-pages \
-	&& git pull origin gh-pages
-
-deploy: ## Deploy built packages to bintray
+deploy: ## Deploy built packages to repository
 	@# use default version if v is not specified
 	@$(eval version := $(or $(v),$(default)))
 	@# -- make sure /public folder exist on host
@@ -89,15 +74,22 @@ deploy: ## Deploy built packages to bintray
 		-e HTTP_PROXY=${http_proxy} \
 		-e HTTPS_PROXY=${https_proxy} \
 		-e JFROG_CLI_OFFER_CONFIG=false \
-		-e BINTRAY_USERNAME=${BINTRAY_USERNAME} \
-		-e BINTRAY_API_KEY=${BINTRAY_API_KEY} \
+		--env-file .env \
 		-v $(DIR)/public:/public \
 		-w /public \
-		docker.bintray.io/jfrog/jfrog-cli-go:latest bash -c " echo 'Starting publishing to bintray' \
-			; jfrog bt config --user $$BINTRAY_USERNAME --key $$BINTRAY_API_KEY --licenses MIT \
-			; jfrog bt upload --override --publish \"/public/*.pub\" docker-suite/alpine/public/1.0 \
-			; jfrog bt upload --override --publish \"/public/v$(version)/x86_64/*\" docker-suite/alpine/public/1.0 v$(version)/x86_64/ \
-			; echo End of publishing"
+		docker.bintray.io/jfrog/jfrog-cli-go:latest /bin/bash -c " \
+			echo 'Starting publishing' \
+			&& jfrog rt config --url \$$ART_URL --user \$$ART_USER --apikey \$$ART_API_KEY --interactive=false \
+			&& jfrog rt upload \"*.pub\" alpine/ --recursive=false \
+			&& jfrog rt upload \"/public/v$(version)/x86_64/*\" alpine/v$(version)/x86_64/ --recursive=false \
+			&& echo 'All packages published successfully' \
+			"
+
+shell: ## Get a command prompt inside the apk-builder container
+	@# use default version if v is not specified
+	@$(eval version := $(or $(v),$(default)))
+	@# get the prompt
+	@$(MAKE) run v=$(version) c=bash
 
 clean: ## Clean the workspace
 	@rm -rf $(DIR)/packages/alpine/*/pkg
