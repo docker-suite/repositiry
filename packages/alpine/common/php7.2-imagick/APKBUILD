@@ -12,7 +12,7 @@ url="https://pecl.php.net/package/$_pkgreal"
 arch="all"
 license="PHP-3.01"
 
-depends="$_php-common"
+depends="$_php-common imagemagick-libs"
 makedepends="$_php-dev imagemagick-dev libtool"
 source="https://pecl.php.net/get/$_pkgreal-$pkgver.tgz"
 srcdir="/tmp/$pkgname-$pkgver"
