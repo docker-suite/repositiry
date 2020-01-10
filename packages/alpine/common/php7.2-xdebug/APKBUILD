@@ -70,7 +70,7 @@ package() {
 
 	make INSTALL_ROOT="$pkgdir" install
 	install -d "$pkgdir/$_config_dir"
-	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
+	echo "zend_extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
 sha512sums="51f87f55ee5a654c587344d1442b0e6cb74a8bfb138d3ba793a17580851595c97e1d961ce25a473e461ac61d1c8a1634412e6f4e3975116dc0ffc52aa3355d0e  xdebug-2.9.0.tgz"
