@@ -45,7 +45,7 @@ packages: ## Build all packages: make packages v=[3.7|3.8|3.9|3.10|3.11]
 	@# Build all packages
 	@$(MAKE) run v=$(version) c=package
 
-dependency: ## Create a package dependency: make dependency v=3.7 -p=php7.1 -d=composer
+dependency: ## Create a package dependency: make dependency v=3.7 p=php7.1 d=composer
 	@# -- use default version if v is not specified
 	@$(eval version := $(or $(v),$(default)))
 	@# -- make sure a package and dependensy are specified
