@@ -27,6 +27,7 @@
  		}
  
  		if (!tmp) {
+
 --- a/sapi/fpm/php-fpm.conf.in
 +++ b/sapi/fpm/php-fpm.conf.in
 @@ -14,14 +14,14 @@
@@ -58,6 +59,7 @@
  
  ; Log level
  ; Possible Values: alert, error, warning, notice, debug
+
 --- a/sapi/fpm/www.conf.in
 +++ b/sapi/fpm/www.conf.in
 @@ -256,7 +256,7 @@ pm.max_spare_servers = 3
