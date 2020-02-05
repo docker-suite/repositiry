@@ -371,7 +371,7 @@ package() {
 
     # # Update FPM versions in configuration files
 	mv "$pkgdir"/etc/php/$_phpver/php-fpm.conf.default "$pkgdir"/etc/php/$_phpver/php-fpm.conf
-    sed -i "s|;pid = run/php-fpm$_phpver.pid|pid = run/php-fpm/$_phpver/php-fpm7.pid|g" "$pkgdir"/etc/php/$_phpver/php-fpm.conf
+    sed -i "s|;pid = run/php-fpm$_phpver.pid|;pid = run/php-fpm/$_phpver/php-fpm7.pid|g" "$pkgdir"/etc/php/$_phpver/php-fpm.conf
     sed -i "s|;error_log = log/php/$_phpver/error.log|error_log = log/php/$_phpver/error.log|g" "$pkgdir"/etc/php/$_phpver/php-fpm.conf
 	mv "$pkgdir"/etc/php/$_phpver/php-fpm.d/www.conf.default "$pkgdir"/etc/php/$_phpver/php-fpm.d/www.conf
     sed -i "s|nobody|www-data|g" "$pkgdir"/etc/php/$_phpver/php-fpm.d/www.conf
