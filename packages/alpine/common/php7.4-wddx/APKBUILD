@@ -13,7 +13,8 @@ license="PHP-3.01"
 
 depends="$_php-common"
 makedepends="$_php-dev"
-srcdir="/tmp/$pkgname-$pkgver"
+srcdir="/tmp/$pkgname-$pkgver/src"
+pkgbasedir="/tmp/$pkgname-$pkgver/pkg"
 builddir="$srcdir/$_pkgreal-$pkgver"
 options="!check"
 

@@ -49,7 +49,8 @@ source="https://php.net/distributions/php-$pkgver.tar.bz2
 	install-pear.patch
 	php7-fpm-version-suffix.patch
 	"
-srcdir="/tmp/php-$pkgver"
+srcdir="/tmp/php-$pkgver/src"
+pkgbasedir="/tmp/php-$pkgver/pkg"
 builddir="$srcdir/php-$pkgver"
 _libdir="/usr/lib/php/$_phpver"
 _extension_dir="$_libdir/modules"

@@ -13,7 +13,8 @@ license="BSD 3 Clause"
 
 depends="phpunit $_php $_php-phar $_php-json $_php-mbstring $_php-openssl $_php-dom $_php-xml"
 makedepends=""
-srcdir="/tmp/$pkgname-$pkgver"
+srcdir="/tmp/$pkgname-$pkgver/src"
+pkgbasedir="/tmp/$pkgname-$pkgver/pkg"
 builddir="$srcdir/$pkgname-$pkgver"
 options="!check"
 

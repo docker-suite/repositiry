@@ -13,7 +13,8 @@ license="MIT"
 
 depends="composer $_php $_php-phar $_php-json $_php-mbstring $_php-openssl $_php-iconv"
 makedepends=""
-srcdir="/tmp/$pkgname-$pkgver"
+srcdir="/tmp/$pkgname-$pkgver/src"
+pkgbasedir="/tmp/$pkgname-$pkgver/pkg"
 builddir="$srcdir/$pkgname-$pkgver"
 options="!check"
 
