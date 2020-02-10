@@ -2,7 +2,7 @@
 DIR:=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
 
 ## Define the default version to package
-default = 3.10
+default = 3.11
 
 ##
 .DEFAULT_GOAL := help
@@ -70,12 +70,14 @@ deploy: ## Deploy built packages to repository
 	@$(eval version := $(or $(v),$(default)))
 	@# -- make sure /public folder exist on host
 	@mkdir -p $(DIR)/public
+	@mkdir -p $(DIR)/log
 	docker run -i ${USE_TTY} --rm \
 		-e HTTP_PROXY=${http_proxy} \
 		-e HTTPS_PROXY=${https_proxy} \
 		-e JFROG_CLI_OFFER_CONFIG=false \
 		--env-file .env \
 		-v $(DIR)/public:/public \
+		-v $(DIR)/log:/root/.jfrog/logs \
 		-w /public \
 		docker.bintray.io/jfrog/jfrog-cli-go:latest /bin/bash -c " \
 			echo 'Starting publishing' \
