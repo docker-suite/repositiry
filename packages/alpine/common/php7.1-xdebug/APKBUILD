@@ -1,7 +1,7 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.1-xdebug
-pkgver=2.9.0
+pkgver=2.9.2
 pkgrel=0
 _pkgreal=xdebug
 _phpver=7.1
@@ -74,4 +74,4 @@ package() {
 	echo "zend_extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="51f87f55ee5a654c587344d1442b0e6cb74a8bfb138d3ba793a17580851595c97e1d961ce25a473e461ac61d1c8a1634412e6f4e3975116dc0ffc52aa3355d0e  xdebug-2.9.0.tgz"
+sha512sums="87de15d3ca82298a404e7b9f3a18efa50d6204c5b9dec499662adf43985d2aa58da352afdb3e8c753713974d902d9c9af033359ff7ac55e40b0c3315b6e1ba6e  xdebug-2.9.2.tgz"
