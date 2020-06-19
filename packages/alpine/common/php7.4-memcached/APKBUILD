@@ -8,7 +8,7 @@ _phpver=7.4
 _php=php$_phpver
 
 pkgdesc="PHP extension for interfacing with memcached via libmemcached library"
-url="https://pecl.php.net/package/$_pkgreal"
+url="https://pecl.php.net/package/memcached"
 arch="all"
 license="PHP-3.01"
 

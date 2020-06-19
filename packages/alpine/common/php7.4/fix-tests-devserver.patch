@@ -1,12 +1,12 @@
 --- a/run-tests.php
 +++ b/run-tests.php
-@@ -2502,6 +2502,9 @@ COMMAND $cmd
- 	// Does the output match what is expected?
- 	$output = preg_replace("/\r\n/", "\n", trim($out));
+@@ -2503,6 +2503,9 @@ COMMAND $cmd
+     // Does the output match what is expected?
+     $output = preg_replace("/\r\n/", "\n", trim($out));
  
-+	// Remove message from built-in development server.
-+	$output = preg_replace("/^PHP [0-9.]+ Development Server started at .*\n\n?/m", "", $output);
++    // Remove message from built-in development server.
++    $output = preg_replace("/^PHP [0-9.]+ Development Server started at .*\n\n?/m", "", $output);
 +
- 	/* when using CGI, strip the headers from the output */
- 	$headers = array();
+     /* when using CGI, strip the headers from the output */
+     $headers = array();
  

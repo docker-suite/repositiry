@@ -1,15 +1,15 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.4-sqlsrv
-pkgver=5.7.1
+pkgver=5.8.1
 pkgrel=0
-_pkgverreal=${pkgver}preview
+_pkgverreal=${pkgver}
 _pkgreal=sqlsrv
 _phpver=7.4
 _php=php$_phpver
 
 pkgdesc="sqlsrv-1.1 parser and emitter"
-url="https://pecl.php.net/package/$_pkgreal"
+url="https://pecl.php.net/package/sqlsrv"
 arch="all"
 license="MIT"
 
@@ -75,4 +75,4 @@ package() {
     printf "; priority=20\nextension=$_pkgreal.so\n" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="134e0d9e19d01d882febfbcb06c91b632640d61c36b9d7beb30249d0a202141699e09a6fe397e70b7016e3a4f75d17ec4310ada24cd6adfb00091e8bad663b8f  sqlsrv-5.7.1preview.tgz"
+sha512sums="31dc3eab62406669eb9c8895354d9a50a271eb0ab7dcb3e74d004bda65c4fe1be80d9f44f3da75556f967bce022590bbc43ac3c1d2830a2cd40601fbe653a5c1  sqlsrv-5.8.1preview.tgz"

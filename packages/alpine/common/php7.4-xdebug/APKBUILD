@@ -1,14 +1,14 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.4-xdebug
-pkgver=2.9.2
+pkgver=2.9.6
 pkgrel=0
 _pkgreal=xdebug
 _phpver=7.4
 _php=php$_phpver
 
 pkgdesc="Provides functions for function traces and profiling"
-url="https://pecl.php.net/package/$_pkgreal"
+url="https://pecl.php.net/package/xdebug"
 arch="all"
 license="The Xdebug license"
 
@@ -74,4 +74,4 @@ package() {
 	echo "zend_extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="87de15d3ca82298a404e7b9f3a18efa50d6204c5b9dec499662adf43985d2aa58da352afdb3e8c753713974d902d9c9af033359ff7ac55e40b0c3315b6e1ba6e  xdebug-2.9.2.tgz"
+sha512sums="f5e1e1de2fa555673c5ccf2bc53e686d3e24cb127171109de09975df7bc32653272fa033662f535b18d81ad9fced9cc5082ef2f63d265bd9abb084dfee6f557e  xdebug-2.9.6.tgz"

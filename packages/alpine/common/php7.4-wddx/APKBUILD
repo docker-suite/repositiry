@@ -7,7 +7,7 @@ _phpver=7.4
 _php=php$_phpver
 
 pkgdesc="wddx has been removed in php 7.4 and is not maintained"
-url="https://pecl.php.net/package/$_pkgreal"
+url="https://pecl.php.net/package/recode"
 arch="all"
 license="PHP-3.01"
 
