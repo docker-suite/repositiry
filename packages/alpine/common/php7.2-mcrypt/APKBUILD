@@ -8,7 +8,7 @@ _phpver=7.2
 _php=php$_phpver
 
 pkgdesc="Provides bindings for the unmaintained libmcrypt."
-url="https://pecl.php.net/package/$_pkgreal"
+url="https://pecl.php.net/package/mcrypt"
 arch="all"
 license="PHP"
 

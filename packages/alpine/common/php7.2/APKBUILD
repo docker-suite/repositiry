@@ -1,7 +1,7 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.2
-pkgver=7.2.27
+pkgver=7.2.31
 pkgrel=0
 _pkgreal=php
 _phpver=7.2
@@ -83,8 +83,21 @@ case "$CARCH" in
 esac
 
 # secfixes:
+#   7.2.31-r0:
+#     - CVE-2019-11048
+#   7.2.29-r0:
+#     - CVE-2020-7064
+#     - CVE-2020-7066
+#   7.2.28-r0:
+#     - CVE-2020-7062
+#     - CVE-2020-7063
+#   7.2.27-r0:
+#     - CVE-2020-7059
+#     - CVE-2020-7060
 #   7.2.26-r0:
+#     - CVE-2019-11044
 #     - CVE-2019-11045
+#     - CVE-2019-11046
 #     - CVE-2019-11047
 #     - CVE-2019-11050
 #   7.2.24-r0:
@@ -588,7 +601,7 @@ _mv() {
 	mv $@
 }
 
-sha512sums="0d2cdfce73405772f359b231c66e6f64e0584a2b77e8e6e24f0c6bf38d3f3cb77dccc829fd7d0974f20030e875c3de399facce659e2b0293fb1c6336d9a37bed  php-7.2.27.tar.bz2
+sha512sums="48d65eae98e6f6e8131c7b383591529f0da3efbb6bdb3d90b2b965cabcdcecf69575064c89f542b6e4346677774ebfb73828b649760e09601d76f48c6c917bc6  php-7.2.31.tar.bz2
 7390fd41b04d39837908c008058347cb6f31706fee30d650531c31a2088f585f9c06d74865d429bf1ff6f3412844bf479a494c39d499a66c873615ede5f73a7f  php7-fpm.initd
 6dfa826370d15d96523bc35ed4c374506d2d308efb41a42dacf9b7019cccd502ffa34e264387027444a4c32cb1cbb9bfa4665ac334feaedb559e26bb409da6cb  php7-fpm.logrotate
 274bd7b0b2b7002fa84c779640af37b59258bb37b05cb7dd5c89452977d71807f628d91b523b5039608376d1f760f3425d165242ca75ee5129b2730e71c4e198  php7-module.conf

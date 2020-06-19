@@ -8,7 +8,7 @@ _phpver=7.2
 _php=php$_phpver
 
 pkgdesc="A PHP wrapper for libsmbclient"
-url="https://pecl.php.net/package/$_pkgreal"
+url="https://pecl.php.net/package/smbclient"
 arch="all"
 license="BSD-2-Clause"
 
@@ -44,6 +44,7 @@ build() {
 	EXTENSION_DIR=$_extension_dir \
     CFLAGS="-fstack-protector-strong -fpic -fpie -O2 -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64" \
     CPPFLAGS="$CFLAGS" \
+    #LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie" \
     LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie" \
     ./configure \
         --prefix=/usr \
