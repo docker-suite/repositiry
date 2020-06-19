@@ -8,7 +8,7 @@ _phpver=7.3
 _php=php$_phpver
 
 pkgdesc="A PHP wrapper for libsmbclient"
-url="https://pecl.php.net/package/$_pkgreal"
+url="https://pecl.php.net/package/smbclient"
 arch="all"
 license="BSD-2-Clause"
 

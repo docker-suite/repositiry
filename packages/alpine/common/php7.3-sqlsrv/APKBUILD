@@ -1,23 +1,24 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.3-sqlsrv
-pkgver=5.6.1
+pkgver=5.8.1
 pkgrel=0
+_pkgverreal=${pkgver}
 _pkgreal=sqlsrv
 _phpver=7.3
 _php=php$_phpver
 
 pkgdesc="sqlsrv-1.1 parser and emitter"
-url="https://pecl.php.net/package/$_pkgreal"
+url="https://pecl.php.net/package/sqlsrv"
 arch="all"
 license="MIT"
 
 depends="$_php-common unixodbc"
 makedepends="$_php-dev autoconf unixodbc-dev"
-source="https://pecl.php.net/get/$_pkgreal-$pkgver.tgz"
-srcdir="/tmp/$pkgname-$pkgver/src"
-pkgbasedir="/tmp/$pkgname-$pkgver/pkg"
-builddir="$srcdir/$_pkgreal-$pkgver"
+source="$_pkgreal-${pkgver}preview.tgz::https://pecl.php.net/get/$_pkgreal-$_pkgverreal.tgz"
+srcdir="/tmp/$pkgname-$_pkgverreal/src"
+pkgbasedir="/tmp/$pkgname-$_pkgverreal/pkg"
+builddir="$srcdir/$_pkgreal-$_pkgverreal"
 _libdir="/usr/lib/php/$_phpver"
 _extension_dir="$_libdir/modules"
 _config_dir="/etc/php/$_phpver/conf.d"
@@ -74,4 +75,4 @@ package() {
     printf "; priority=20\nextension=$_pkgreal.so\n" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="f2b63e4a486a5a34a69ef6f38937c8e66f06ba70aeca3fb848d295b533b8fa08abb450c6394d0478d6c2a22ce0b2410dbfe5f1b39b11e8c5d68a4cb04bf2c838  sqlsrv-5.6.1.tgz"
+sha512sums="31dc3eab62406669eb9c8895354d9a50a271eb0ab7dcb3e74d004bda65c4fe1be80d9f44f3da75556f967bce022590bbc43ac3c1d2830a2cd40601fbe653a5c1  sqlsrv-5.8.1preview.tgz"

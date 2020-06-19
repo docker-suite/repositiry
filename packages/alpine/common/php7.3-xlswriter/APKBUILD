@@ -1,14 +1,14 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.3-xlswriter
-pkgver=1.3.2
+pkgver=1.3.5
 pkgrel=0
 _pkgreal=xlswriter
 _phpver=7.3
 _php=php$_phpver
 
 pkgdesc="A PHP Extension for creating and reader XLSX files. "
-url="https://pecl.php.net/package/$_pkgreal"
+url="https://pecl.php.net/package/xlswriter"
 arch="all !s390x"
 license="BSD-2-Clause"
 
@@ -75,4 +75,4 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="6654ac011463bc6cfce8f8c607204346399b1cec3089272d252bba5ffa3fbe385033e1469fea35cdf5e0a9ce12be72b882a27491480ad13cddebeeb49d5d74f7  xlswriter-1.3.2.tgz"
+sha512sums="95a25cf90d0da6e4732c8700cad858fbeaf0ecaf1ecfd184b563aaffe784aad138490a28312b4f802c2babbf1a6deb5f8ae8f270c857df974b6924976817fc39  xlswriter-1.3.5.tgz"

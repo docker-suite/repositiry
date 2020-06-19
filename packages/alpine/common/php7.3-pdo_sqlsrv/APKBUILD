@@ -1,14 +1,14 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.3-pdo_sqlsrv
-pkgver=5.6.1
+pkgver=5.8.1
 pkgrel=0
 _pkgreal=pdo_sqlsrv
 _phpver=7.3
 _php=php$_phpver
 
 pkgdesc="pdo_sqlsrv-1.1 parser and emitter"
-url="https://pecl.php.net/package/$_pkgreal"
+url="https://pecl.php.net/package/pdo_sqlsrv"
 arch="all"
 license="MIT"
 
@@ -74,4 +74,4 @@ package() {
     printf "; priority=30\nextension=$_pkgreal.so\n" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="e3940aaddaf7c00635c7733245a8e2467386df84fab750ae9221877d36dd7668a969bd80b842e57678a0ab4c1574df78360d547f936f3f70d5dac0d06902f888  pdo_sqlsrv-5.6.1.tgz"
+sha512sums="6d72a5305377c3549979387032267cf3c889219d88e0540618417afed0a6dd6012db6ea5e97084d456d7c9b754f958a33b004bd020efac568c1b745a7003c400  pdo_sqlsrv-5.8.1.tgz"

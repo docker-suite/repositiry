@@ -1,14 +1,14 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.3-yaml
-pkgver=2.0.4
+pkgver=2.1.0
 pkgrel=0
 _pkgreal=yaml
 _phpver=7.3
 _php=php$_phpver
 
 pkgdesc="YAML-1.1 parser and emitter"
-url="https://pecl.php.net/package/$_pkgreal"
+url="https://pecl.php.net/package/yaml"
 arch="all"
 license="MIT"
 
@@ -74,4 +74,4 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="138e5b4566800fc7d624baf71bc585d6d432755046e598ae9f4099fa565727e04d79bb171289a53eb9e5daa416ffee1b0fb4967c84976ac6cd6fc01b0a05fbae  yaml-2.0.4.tgz"
+sha512sums="3731ca2b84e80599d7fae4f58efdd11e9920c672ea6e62ff6b0d57d721d3f6f12ca86efe88f63c324d4ad2b73d6947a21f6e5a47263538ca0d5e822b8fc7b8bd  yaml-2.1.0.tgz"
