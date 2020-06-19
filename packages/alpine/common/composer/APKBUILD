@@ -1,7 +1,7 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=composer
-pkgver=1.9.3
+pkgver=1.10.7
 pkgrel=200
 
 pkgdesc="Dependency manager for PHP"
@@ -22,4 +22,4 @@ package() {
     install -m 0755 -D "$srcdir"/$pkgname-$pkgver.phar "$pkgdir"/usr/bin/$pkgname
 }
 
-sha512sums="9e5f31f48c2cecf337c8c0559e8e8c2df3aea1317778ae38ce9d30995624a6e5565d8cf97f1e340caf1eace892197c96a9d14fb54499f40a003a6ddebc9c032a  composer-1.9.3.phar"
+sha512sums="f5d5a5c1a1ef2ae09b86e3bcd5727a3c8325160984ec4a3b1bd187425baed261848e41e3cbdcb98c6d07d9ade3e47a7958cf5fc9d0036c93e89e6ede5c258d89  composer-1.10.7.phar"
