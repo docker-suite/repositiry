@@ -1,0 +1,43 @@
+# Maintainer: Hexosse <hexosse@gmail.com>
+
+pkgname=enchant
+pkgver=1.6.0
+pkgrel=100
+
+pkgdesc="A wrapper library for generic spell checking"
+url="http://www.abisource.com/enchant/"
+arch="all"
+license="LGPL-2.0-or-later"
+subpackages="$pkgname-dev $pkgname-doc"
+makedepends="aspell-dev glib-dev dbus-glib-dev hunspell-dev gettext-dev file bash"
+source="http://www.abisource.com/downloads/$pkgname/$pkgver/$pkgname-$pkgver.tar.gz
+	hunspell-build-fix.patch"
+
+prepare() {
+	cd "$builddir"
+	update_config_sub
+	default_prepare
+}
+
+build() {
+	cd "$builddir"
+	./configure \
+		--build=$CBUILD \
+		--host=$CHOST \
+		--prefix=/usr \
+		--disable-static
+	make
+}
+
+check() {
+	cd "$builddir"/tests
+	./test-enchant
+}
+
+package() {
+	cd "$builddir"
+	make DESTDIR="$pkgdir" install
+}
+
+sha512sums="0ca1634bb783df51512df4abecc89abdadee6baf7330d6e5f90cc15d10779896a3521a1c079ecc07e4df4f7a018ce398cca9d0125a7845a314a059840ebc9137  enchant-1.6.0.tar.gz
+1794fe687daddccd6aa79da78d3d26454b8e0f1bc57411bf7424dc5aa09b0c3e43681cf474dc2d75bba98c991c33b2a8bf4229c5bbf687c09aa5a983e7794464  hunspell-build-fix.patch"
