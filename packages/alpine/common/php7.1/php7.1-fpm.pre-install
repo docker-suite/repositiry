@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# 82 is the standard uid/gid for "www-data" in Alpine
+# https://git.alpinelinux.org/aports/tree/main/apache2/apache2.pre-install?h=3.9-stable
+# https://git.alpinelinux.org/aports/tree/main/lighttpd/lighttpd.pre-install?h=3.9-stable
+# https://git.alpinelinux.org/aports/tree/main/nginx/nginx.pre-install?h=3.9-stable
+
 addgroup -Sg 82 www-data 2>/dev/null
 adduser -u 82 -S -D -H -h /var/www -s /sbin/nologin -G www-data -g www-data www-data 2>/dev/null
 addgroup www-data 2>/dev/null
