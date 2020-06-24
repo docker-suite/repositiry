@@ -204,6 +204,8 @@ _build() {
 		--with-layout=GNU \
 		--with-config-file-path=/etc/php/$_phpver \
 		--with-config-file-scan-dir=$_config_dir \
+        `# https://github.com/docker-library/php/issues/439` \
+		--with-mhash \
 		--with-pic \
 		--with-pear=/usr/share/php/$_phpver \
 		--disable-short-tags \
@@ -315,6 +317,8 @@ build() {
 	# cgi, cli, fpm, embed, litespeed
 	_build --disable-phpdbg \
 		--enable-fpm \
+        --with-fpm-user=www-data \
+        --with-fpm-group=www-data \
 		--enable-embed \
 		--with-litespeed
 }
@@ -608,7 +612,7 @@ sha512sums="48d65eae98e6f6e8131c7b383591529f0da3efbb6bdb3d90b2b965cabcdcecf69575
 b918e783099c846464221f860342acb683ff83225d676daaba25695a5a47ad60e742567f3627deb03c580e2e38720f8da9a48d88553e7e8609eb3822f59b4d0c  php7.2-cgi.post-install
 4c4c860b279105dcebc71367c5a04546d9b211f4be39739e539c11723c93c12dfed815209b0393c76430c91b1ebaa15b8023976619ca9c2a3b1fe1b4876228d7  php7.2-dev.post-install
 489310ec8612b63d4a9fff588b1419eadc929c38cf871a184103db163a48d253109a3937602cb30067896ea030b3466ac2bbbafe21725dd5d58edbe99de742ae  php7.2-fpm.post-install
-0197cf9c7e884805045883e24fa302a44a7dc23e1337e5d2df0404984991f9a4b754a5a6bd649ef48f0dc4ebb6b3bd16af74e638e65db0fa37ee30946ee67750  php7.2-fpm.pre-install
+594c0d05cf24fb5191caf13932d5b3989adac4aa1a90b87e4910b65780e13281c72a04a9c8f1b530cf4ed9e5437f4ef21a3cbe75712301df6d7f4e85027b3e58  php7.2-fpm.pre-install
 243389e268b106d782dbc84b1c1d8a6d54fd63599cd9d5f1729e301ffde111b67e579f740aeeda91b2991ea4f6658d2a19f4b3ef3f24d041f3044b87119857a6  php7.2-litespeed.post-install
 5290f4ace21b1053fbf7a29d5855206a7d6918768b801628cc55b0a023e27143052df48b64dbfdce528355c25b57e345b74ec43600e0d03bf294b65e1af597cc  php7.2-pear.post-install
 c3e1e9c0bba824ca57a40ee56bd819340e0fb47c45cbe1aa091bac7c2266042cf2b050e1d3fdaa85d8a5a262407a98c9f56dc97ba676fa4da06206ccab529dc2  php7.2-phar.post-install

@@ -214,6 +214,8 @@ _build() {
 		--with-layout=GNU \
 		--with-config-file-path=/etc/php/$_phpver \
 		--with-config-file-scan-dir=$_config_dir \
+        `# https://github.com/docker-library/php/issues/439` \
+		--with-mhash \
 		--with-pic \
 		--with-pear=/usr/share/php/$_phpver \
 		--disable-short-tags \
@@ -325,6 +327,8 @@ build() {
 	# cgi, cli, fpm, embed, litespeed
 	_build --disable-phpdbg \
 		--enable-fpm \
+        --with-fpm-user=www-data \
+        --with-fpm-group=www-data \
 		--enable-embed \
 		--with-litespeed
 }
