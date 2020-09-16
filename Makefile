@@ -24,6 +24,7 @@ run: ## Run a command in a the docker apk-builder container: make run v=[3.7|3.8
 	@docker run -i ${USE_TTY} --rm \
 		-e http_proxy=${http_proxy} \
 		-e https_proxy=${https_proxy} \
+		-e no_proxy=${no_proxy} \
 		-v $(DIR)/config:/config \
 		-v $(DIR)/public:/public \
 		-v $(DIR)/packages/alpine/common:/packages/common \
@@ -55,12 +56,14 @@ dependency: ## Create a package dependency: make dependency v=3.7 p=php7.1 d=com
 	@docker run -i ${USE_TTY} --rm \
 		-e http_proxy=${http_proxy} \
 		-e https_proxy=${https_proxy} \
+		-e no_proxy=${no_proxy} \
 		-v $(DIR)/config:/config \
 		-v $(DIR)/packages/alpine/common:/packages \
 		dsuite/apk-builder-dev:$(version) bash -c "dependency -p $(p) -d \"$(d)\""  > /dev/null || true
 	@docker run -i ${USE_TTY} --rm \
 		-e http_proxy=${http_proxy} \
 		-e https_proxy=${https_proxy} \
+		-e no_proxy=${no_proxy} \
 		-v $(DIR)/config:/config \
 		-v $(DIR)/packages/alpine/v$(version):/packages \
 		dsuite/apk-builder-dev:$(version) bash -c "dependency -p $(p) -d \"$(d)\""  > /dev/null || true
@@ -74,6 +77,7 @@ deploy: ## Deploy built packages to repository
 	docker run -i ${USE_TTY} --rm \
 		-e HTTP_PROXY=${http_proxy} \
 		-e HTTPS_PROXY=${https_proxy} \
+		-e NO_PROXY=${no_proxy} \
 		-e JFROG_CLI_OFFER_CONFIG=false \
 		--env-file .env \
 		-v $(DIR)/public:/public \
