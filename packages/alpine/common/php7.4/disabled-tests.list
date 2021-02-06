@@ -72,7 +72,7 @@ ext/pdo_odbc/tests/max_columns.phpt
 
 # Fails in chroot (on Travis).
 ext/posix/tests/posix_errno_variation2.phpt
-ext/posix/tests/posix_kill_basic.phpt
+#ext/posix/tests/posix_kill_basic.phpt
 
 # Randomly fails.
 ext/pcntl/tests/002.phpt

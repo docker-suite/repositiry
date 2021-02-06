@@ -1,7 +1,7 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.4-smbclient
-pkgver=1.0.0
+pkgver=1.0.4
 pkgrel=0
 _pkgreal=smbclient
 _phpver=7.4
@@ -73,4 +73,4 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="f68dd24a229bbd8ccb06c08584e9a277cc864f062e3d308dffb136a9bfef9407f0930b022efd362b78ffa489c2770d79f69fa30f0799430813929df973e042e8  smbclient-1.0.0.tgz"
+sha512sums="2b39d3ac4cfa20f4e77691990908ca5659275bcf97e2781e4aab4d54771e7d922ea32e4c3d9600d5c30fabf87ad471d287657956506fdc559d40eed1c5b9b610  smbclient-1.0.4.tgz"

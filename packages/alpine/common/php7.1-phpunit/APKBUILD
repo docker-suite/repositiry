@@ -1,7 +1,7 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.1-phpunit
-pkgver=1.0.0
+pkgver=7.5.19
 pkgrel=0
 _phpver=7.1
 _php=php$_phpver
@@ -11,7 +11,7 @@ url="https://phpunit.de/"
 arch="noarch"
 license="BSD 3 Clause"
 
-depends="phpunit $_php $_php-phar $_php-json $_php-mbstring $_php-openssl $_php-dom $_php-xml"
+depends="phpunit7 $_php $_php-phar $_php-json $_php-mbstring $_php-openssl $_php-dom $_php-xml"
 makedepends=""
 srcdir="/tmp/$pkgname-$pkgver/src"
 pkgbasedir="/tmp/$pkgname-$pkgver/pkg"

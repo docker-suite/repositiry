@@ -1,7 +1,7 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.1-ast
-pkgver=1.0.5
+pkgver=1.0.10
 pkgrel=0
 _pkgreal=ast
 _phpver=7.1
@@ -73,4 +73,4 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="7f56816553894849b539233209c57df9f9239ddc8a172c924a1f72c57ba474228e6f82779787a40ed1d78cac890dcd3d49bbb1aa2f7d4c29b95ae9809c836141  ast-1.0.5.tgz"
+sha512sums="3f6c31db66a0d18f5d7c80476c324c4f6eb9e52d87c89d2c66dac2b169a3fb3e0428114253819fb7644a595fb71ee37a13cd97bec4e9c0df316855b890b812d2  ast-1.0.10.tgz"

@@ -1,7 +1,7 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.1-yaml
-pkgver=2.0.4
+pkgver=2.2.1
 pkgrel=0
 _pkgreal=yaml
 _phpver=7.1
@@ -73,5 +73,4 @@ package() {
 	install -d "$pkgdir/$_config_dir"
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
-
-sha512sums="138e5b4566800fc7d624baf71bc585d6d432755046e598ae9f4099fa565727e04d79bb171289a53eb9e5daa416ffee1b0fb4967c84976ac6cd6fc01b0a05fbae  yaml-2.0.4.tgz"
+sha512sums="b171ca9ca108dc093fb0dda3bc9de821fdd8ddcf79d386baba02f367e331f42e6500f26e73577864cd5f8d12f8c9bfe01962fb8d1bb56fa26d6f0a1208ac5441  yaml-2.2.1.tgz"

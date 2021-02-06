@@ -1,20 +1,20 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.4
-pkgver=7.4.6
+pkgver=7.4.14
 pkgrel=0
 _pkgreal=php
 _phpver=7.4
 _apiver=20190902
 _default_php="yes"
 
-pkgdesc="The PHP $_phpver language runtime engine"
+pkgdesc="The PHP$_phpver language runtime engine"
 url="http://www.php.net/"
 arch="all"
 license="PHP-3.01 BSD LGPL-2.0-or-later MIT Zend-2.0"
 
 depends="$pkgname-common"
-depends_dev="$pkgname=$pkgver-r$pkgrel autoconf pcre2-dev"
+depends_dev="$pkgname=$pkgver-r$pkgrel autoconf pcre2-dev re2c"
 _depends_mysqlnd="$pkgname-openssl"
 _depends_pdo_mysql="$pkgname-pdo $pkgname-mysqlnd"
 _depends_phar="$pkgname"
@@ -64,7 +64,8 @@ _extensions="
 	sqlite3 sysvmsg sysvsem sysvshm tidy tokenizer
 	xml xmlreader xmlrpc xmlwriter xsl zip
 	"
-subpackages="$pkgname-dev $pkgname-doc $pkgname-apache2 $pkgname-phpdbg
+subpackages="$pkgname-dev $pkgname-dbg $pkgname-doc
+    $pkgname-apache2 $pkgname-phpdbg
 	$pkgname-embed $pkgname-litespeed $pkgname-cgi $pkgname-fpm
 	$pkgname-pear::noarch
 	"
@@ -81,70 +82,6 @@ case "$CARCH" in
     s390x) options="$options !check";;
     ppc64le) options="$options !check";;
 esac
-
-# secfixes:
-#   7.4.6-r0:
-#     - CVE-2019-11048
-#   7.4.5-r0:
-#     - CVE-2020-7067
-#   7.4.4-r0:
-#     - CVE-2020-7064
-#     - CVE-2020-7065
-#     - CVE-2020-7066
-#   7.4.3-r0:
-#     - CVE-2020-7061
-#     - CVE-2020-7062
-#     - CVE-2020-7063
-#   7.4.2-r0:
-#     - CVE-2020-7059
-#     - CVE-2020-7060
-#   7.4.1-r0:
-#     - CVE-2019-11044
-#     - CVE-2019-11045
-#     - CVE-2019-11046
-#     - CVE-2019-11047
-#     - CVE-2019-11049
-#     - CVE-2019-11050
-#   7.4.11-r0:
-#     - CVE-2019-11043
-#   7.4.9-r0:
-#     - CVE-2019-13224
-#   7.4.8-r0:
-#     - CVE-2019-11041
-#     - CVE-2019-11042
-#   7.2.19-r0:
-#     - CVE-2019-11039
-#     - CVE-2019-11040
-#   7.2.18-r0:
-#     - CVE-2019-11036
-#   7.2.17-r0:
-#     - CVE-2019-11034
-#     - CVE-2019-11035
-#   7.2.16-r0:
-#     - CVE-2019-9641
-#     - CVE-2019-9640
-#     - CVE-2019-9639
-#     - CVE-2019-9638
-#     - CVE-2019-9637
-#   7.2.14-r0:
-#     - CVE-2019-9024
-#     - CVE-2019-9023
-#     - CVE-2019-9022
-#     - CVE-2019-9021
-#     - CVE-2019-9020
-#   7.2.13-r0:
-#     - CVE-2018-20783
-#   7.2.8-r0:
-#     - CVE-2015-9253
-#     - CVE-2018-12882
-#     - CVE-2018-12883
-#     - CVE-2018-14851
-#   7.2.5-r0:
-#     - CVE-2018-5712
-#     - CVE-2018-10546
-#     - CVE-2018-10547
-#     - CVE-2018-10548
-#     - CVE-2018-10549
 
 prepare() {
 	cd "$builddir"
@@ -351,10 +288,11 @@ check() {
 		x86 | armhf | aarch64) allow_fail='yes'
 	esac
 
-	NO_INTERACTION=1 REPORT_EXIT_STATUS=1 \
+	TESTS="${TESTS:- --show-diff}" NO_INTERACTION=1 REPORT_EXIT_STATUS=1 \
 		SKIP_SLOW_TESTS=1 SKIP_ONLINE_TESTS=1 TEST_TIMEOUT=10 \
-		TZ= LANG= LC_ALL= \
-		make test || [ "$allow_fail" = yes ] || return 1
+		TZ='' LANG='' LC_ALL='' \
+		TRAVIS=true SKIP_IO_CAPTURE_TESTS=1 \
+		make test || [ "$allow_fail" = yes ]
 
 	echo 'NOTE: We have skipped quite a lot tests, see disabled-tests.list.'
 }
@@ -531,10 +469,11 @@ phar() {
 	cd "$pkgdir"
 
 	mkdir -p "$subpkgdir"/usr/bin
-	mv usr/bin/phar.phar "$subpkgdir"/usr/bin/phar.phar$_phpver
+	rm usr/bin/phar$_phpver
+	mv usr/bin/phar$_phpver.phar "$subpkgdir"/usr/bin/phar$_phpver.phar
 
-	rm usr/bin/phar
-	ln -s phar.phar$_phpver "$subpkgdir"/usr/bin/phar$_phpver
+	ln -s phar$_phpver.phar "$subpkgdir"/usr/bin/phar$_phpver
+	ln -s phar$_phpver.phar "$subpkgdir"/usr/bin/phar.phar$_phpver
 }
 
 _extension() {
@@ -613,7 +552,7 @@ _mv() {
 	mv $@
 }
 
-sha512sums="c34c48cb0b15976998e7c941057ddafeded23a831616f9f89171caa30b6593760986349c5ba90a6c192b6dfc0f35437dff9e8f94dc2104c807ccadfbad0e243b  php-7.4.6.tar.bz2
+sha512sums="86e1175953a276b1f9b390cb20de64c2a92534d33dc529b6d17ecfff761109dd9d3981af1668b57dc002cb73e2a36a2984104169891bedba052512e08246f1ff  php-7.4.14.tar.bz2
 1c708de82d1086f272f484faf6cf6d087af7c31750cc2550b0b94ed723961b363f28a947b015b2dfc0765caea185a75f5d2c2f2b099c948b65c290924f606e4f  php7-fpm.initd
 49936d8240594fc122fb429f76a1718bb860891cf0741fe26c0876e3e81cbf3154c82f6271a8e60729f908e5a5343f9aaa1e0198ea5d82551ef8c0dbc08b9e50  php7-fpm.logrotate
 274bd7b0b2b7002fa84c779640af37b59258bb37b05cb7dd5c89452977d71807f628d91b523b5039608376d1f760f3425d165242ca75ee5129b2730e71c4e198  php7-module.conf
@@ -626,8 +565,8 @@ b9d45d6af18d68b6d68ed8bd481ec8d37bda9eaa4481f7613623efc16fedd0e2f90e440320e9fe49
 aafa1e85b5fa7e7be972690d28d513338aa2a5dc62600085f3423bfd26e60228394ef3e9a2c0d55fde3328dd9fdc2dbf0f115724929498e8db56bbfd94c1aafe  php7.4-phar.post-install
 65793759aa85cc32f4a8643ffc542a19f21e5727bc8a7b28b2ff6324c76d817f63783fc5096e20710ebc6c7ab3bc2aed666e3b39b31cdfbfb720b3b0b3f6f6c6  php7.4-phpdbg.post-install
 65793759aa85cc32f4a8643ffc542a19f21e5727bc8a7b28b2ff6324c76d817f63783fc5096e20710ebc6c7ab3bc2aed666e3b39b31cdfbfb720b3b0b3f6f6c6  php7.4.post-install
-7cc2d7763867778fc82f8b6c0c305782acdc78801e4e808c3947fc67c136fc9d3f6aa1c81c5f122c1c0d134ff8e59bfb403783455f93afb7bb15d99091c15f26  disabled-tests.list
-fbfd0975845a5f7f132bc7d1d9d7c5346ccbb715afc3f55f677970c3b211e93d44e2fde182832663c0f96f3a5917301d6abf29f6760265ddcc89961d3fe45d4a  fix-tests-devserver.patch
+38da366de1f89a2471cad193b82c865e240a790dacc9905115536cb02d38cc051ca9b89499d789e782f074ef7aa79a5a60ea0a2805e800a10261a41d1e673e5b  disabled-tests.list
+7c0d5ffdfa6212bececc1da4adbb79344d5fd76708180655948413078834d42a805d6c45cfb01a7dcbf55f83c5b6611fefe5501cd9b113f30c2504fbd05706f9  fix-tests-devserver.patch
 df1911a2e30e7cec5534707b95e84a8c2c450e9e37bceab942faa77ab04aab9a1e137b8053a5f9f7ee946a65fa51b53ab4accb952ad15c88a73c88f6c2f2abb3  includedir.patch
 24070ab0dfe257bfcace12b2aef6bf1a60184102c6c46586c20e17a9c0da435427b384e29c1afe023c6cd8e558ebcd3ca2949be4d213930ff4d3858db9d18050  install-pear.patch
 b12632e40a8a824d44251c3493bce6610df7aaed1c68cc510ae354066c45b672b4dfb2e1eb66a3fe8fcec56178e64680eb7ab86168cf759626d7aa6e1fd573cb  php7-fpm-version-suffix.patch"

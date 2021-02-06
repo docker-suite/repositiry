@@ -1,6 +1,6 @@
 --- a/run-tests.php
 +++ b/run-tests.php
-@@ -2503,6 +2503,9 @@ COMMAND $cmd
+@@ -2500,6 +2500,9 @@ COMMAND $cmd
      // Does the output match what is expected?
      $output = preg_replace("/\r\n/", "\n", trim($out));
  

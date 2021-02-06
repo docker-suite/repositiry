@@ -1,0 +1,26 @@
+# Maintainer: Hexosse <hexosse@gmail.com>
+
+pkgname=phpunit9
+pkgver=9.5.1
+pkgrel=0
+_pkgreal=phpunit
+
+pkgdesc="The PHP Unit Testing framework"
+url="https://phpunit.de/"
+arch="noarch"
+license="BSD 3 Clause"
+
+depends=""
+makedepends=""
+source="$pkgname-$pkgver.phar::https://phar.phpunit.de/$_pkgreal-$pkgver.phar"
+srcdir="/tmp/$pkgname-$pkgver/src"
+pkgbasedir="/tmp/$pkgname-$pkgver/pkg"
+builddir="$srcdir/$pkgname-$pkgver"
+options="!check"
+install_if="php7.3-phpunit php7.4-phpunit"
+
+package() {
+    install -m 0755 -D "$srcdir"/$pkgname-$pkgver.phar "$pkgdir"/usr/bin/$pkgname
+}
+
+sha512sums="9ef5a57e41e1e2cdde9fc466bfcf92980dc091c7690aaefa9575f1e63da342399ce2a078a5b0f2e6290d76737eea85bd9c4f2d5cfeac9bea2d9782bf00e5f09d  phpunit9-9.5.1.phar"

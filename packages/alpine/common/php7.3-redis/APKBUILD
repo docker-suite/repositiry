@@ -1,7 +1,7 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.3-redis
-pkgver=5.2.2
+pkgver=5.3.2
 pkgrel=0
 _pkgreal=redis
 _phpver=7.3
@@ -67,4 +67,4 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="0020c572bcd24cdb479046727fba2d30ca87c9a7111c51e5fe3be0b85459e3e7dfc8892b690650de0a7dc80c1a8921f9de45590f6e60257fbf0534729c6e6f4f  redis-5.2.2.tgz"
+sha512sums="95ce960b78cf94ecd212ec88914935167af37e4176d4b111dfc8c6f1a0846a34beba7f9f516cd7a5e1c9dda23f46cce44c99aaa5b42724c0c2a188b0698af414  redis-5.3.2.tgz"

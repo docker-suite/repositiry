@@ -1,7 +1,7 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.3-igbinary
-pkgver=3.1.2
+pkgver=3.2.1
 pkgrel=0
 _pkgreal=igbinary
 _phpver=7.3
@@ -76,4 +76,4 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="8d293b63e64a2759d55569fda9f9641c34dd9cc1529612d22821f8026b09010e35e2f36552f88e4af89c64a81a9a1548e012b176e2fedab74f839bf7699168c2  igbinary-3.1.2.tgz"
+sha512sums="ab291f0479d07c2943193ff59fb32cee1e61ad16423d7d3e06ab94e1be57644619f2d0ee6d26c849b5a95d488e4c1e7e2671ebf63ef58a5889d024a95d14c2e0  igbinary-3.2.1.tgz"
