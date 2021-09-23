@@ -76,4 +76,6 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="8d293b63e64a2759d55569fda9f9641c34dd9cc1529612d22821f8026b09010e35e2f36552f88e4af89c64a81a9a1548e012b176e2fedab74f839bf7699168c2  igbinary-3.1.2.tgz"
+sha512sums="
+8d293b63e64a2759d55569fda9f9641c34dd9cc1529612d22821f8026b09010e35e2f36552f88e4af89c64a81a9a1548e012b176e2fedab74f839bf7699168c2  igbinary-3.1.2.tgz
+"

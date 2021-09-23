@@ -23,4 +23,6 @@ package() {
     install -m 0755 -D "$srcdir"/$pkgname-$pkgver.phar "$pkgdir"/usr/bin/$pkgname
 }
 
-sha512sums="29c866791ca315e8d1c08162fe1c69a25c12a3fd4cca262a0c8b5c07f4ac7da05ad1f649a5451ed4c26398c91015a1e498cafbf9c99eb933499d72cc5b1f348b  phpunit8-8.5.14.phar"
+sha512sums="
+29c866791ca315e8d1c08162fe1c69a25c12a3fd4cca262a0c8b5c07f4ac7da05ad1f649a5451ed4c26398c91015a1e498cafbf9c99eb933499d72cc5b1f348b  phpunit8-8.5.14.phar
+"

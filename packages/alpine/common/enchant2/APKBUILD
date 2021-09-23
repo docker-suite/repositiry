@@ -30,4 +30,6 @@ check() {
 package() {
 	make DESTDIR="$pkgdir" pkgdatadir=/usr/share/enchant-2 install
 }
-sha512sums="e29b3a85d993af28044a86dd23a3ca74c7d50b4218e542c380053a3eaf70c3ea2406feb3361ba8e793bac586c252330bb20fb56c65f3a0a54f63f103cc0abb35  enchant-2.2.15.tar.gz"
+sha512sums="
+e29b3a85d993af28044a86dd23a3ca74c7d50b4218e542c380053a3eaf70c3ea2406feb3361ba8e793bac586c252330bb20fb56c65f3a0a54f63f103cc0abb35  enchant-2.2.15.tar.gz
+"

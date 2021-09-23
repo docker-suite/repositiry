@@ -73,4 +73,6 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="65b4a8aaed63afb68a47af6563f59596e30ab26ec53760d9c0059020149b057690da0d6eb4c3bd415471264f7c428b1d80a0629d552fb693da556f0b02038b28  ds-1.3.0.tgz"
+sha512sums="
+65b4a8aaed63afb68a47af6563f59596e30ab26ec53760d9c0059020149b057690da0d6eb4c3bd415471264f7c428b1d80a0629d552fb693da556f0b02038b28  ds-1.3.0.tgz
+"

@@ -75,4 +75,6 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="5e9c5b4540be7abdf2f473d2f8955d8708934a1d6e05cb2c99154cc7ba8a2bbf9afde51769e20f46ef278efd6f60b9172e0864c31e0976b9d3096a337035e7a9  apcu-5.1.18.tgz"
+sha512sums="
+5e9c5b4540be7abdf2f473d2f8955d8708934a1d6e05cb2c99154cc7ba8a2bbf9afde51769e20f46ef278efd6f60b9172e0864c31e0976b9d3096a337035e7a9  apcu-5.1.18.tgz
+"

@@ -23,4 +23,6 @@ package() {
     install -m 0755 -D "$srcdir"/$pkgname-$pkgver.phar "$pkgdir"/usr/bin/$pkgname
 }
 
-sha512sums="9ef5a57e41e1e2cdde9fc466bfcf92980dc091c7690aaefa9575f1e63da342399ce2a078a5b0f2e6290d76737eea85bd9c4f2d5cfeac9bea2d9782bf00e5f09d  phpunit9-9.5.1.phar"
+sha512sums="
+9ef5a57e41e1e2cdde9fc466bfcf92980dc091c7690aaefa9575f1e63da342399ce2a078a5b0f2e6290d76737eea85bd9c4f2d5cfeac9bea2d9782bf00e5f09d  phpunit9-9.5.1.phar
+"

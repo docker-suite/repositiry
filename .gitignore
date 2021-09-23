@@ -3,6 +3,7 @@
 **/*.rsa.pub
 
 .env
+.cmd
 
 **/config
 **/packages/**/pkg

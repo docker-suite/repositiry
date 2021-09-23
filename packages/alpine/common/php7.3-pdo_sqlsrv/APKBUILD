@@ -74,4 +74,6 @@ package() {
     printf "; priority=30\nextension=$_pkgreal.so\n" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="6d72a5305377c3549979387032267cf3c889219d88e0540618417afed0a6dd6012db6ea5e97084d456d7c9b754f958a33b004bd020efac568c1b745a7003c400  pdo_sqlsrv-5.8.1.tgz"
+sha512sums="
+6d72a5305377c3549979387032267cf3c889219d88e0540618417afed0a6dd6012db6ea5e97084d456d7c9b754f958a33b004bd020efac568c1b745a7003c400  pdo_sqlsrv-5.8.1.tgz
+"

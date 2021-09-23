@@ -22,4 +22,6 @@ package() {
     install -m 0755 -D "$srcdir"/$pkgname-$pkgver.phar "$pkgdir"/usr/bin/$pkgname
 }
 
-sha512sums="0d20dced4269772e1cc6b4d9ad97d661c64e034742516a6d4a7ba566bef35b821b63e49f5506ec40968350b9e641abcbfb7a810e8f6d3c3e48aa41be78688235  composer-2.0.9.phar"
+sha512sums="
+b979e7066dc78a765c1cfc343aacdbcbb0502470c104f028ad5a51ad70c67653f530435fb1131205a078be2c541fbc209f0a22cc304a95bd8b309680bd43ea9d  composer-2.0.9.phar
+"
