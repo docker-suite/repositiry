@@ -172,13 +172,12 @@ _build() {
 		--enable-fileinfo=shared \
 		--enable-ftp=shared \
 		--enable-gd=shared \
-			--with-freetype-dir=/usr \
+			--with-freetype \
 			--disable-gd-jis-conv \
 			--enable-gd-native-ttf \
-			--with-jpeg-dir=/usr \
-			--with-png-dir=/usr \
-			--with-webp-dir=/usr \
-			--with-xpm-dir=/usr \
+			--with-jpeg \
+			--with-webp \
+			--with-xpm \
 		--with-gettext=shared \
 		--with-gmp=shared \
 		--with-iconv=shared \
