@@ -1,7 +1,7 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.2-smbclient
-pkgver=1.0.4
+pkgver=1.0.6
 pkgrel=0
 _pkgreal=smbclient
 _phpver=7.2
@@ -74,5 +74,5 @@ package() {
 }
 
 sha512sums="
-2b39d3ac4cfa20f4e77691990908ca5659275bcf97e2781e4aab4d54771e7d922ea32e4c3d9600d5c30fabf87ad471d287657956506fdc559d40eed1c5b9b610  smbclient-1.0.4.tgz
+381051dbe6347ce3b0be9d1ed44ee80be846ce1cd4255689127220a48e3c157853e98ae463435a12342f6370b4e96c162069d8d00574aaf88675c5b9ad0810e8  smbclient-1.0.6.tgz
 "

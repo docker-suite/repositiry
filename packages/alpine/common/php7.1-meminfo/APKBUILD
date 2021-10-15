@@ -1,7 +1,7 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.1-meminfo
-pkgver=1.0.5
+pkgver=1.1.1
 pkgrel=0
 _pkgreal=meminfo
 _phpver=7.1
@@ -74,4 +74,4 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="fad7cc7e8a638316b05292e24c1739f46f2d8212b1ab262e062e2c234495ffe6fe460cacd452c6f524d05b6093755c9c189d568625aaebef8ab6f0d0cc241dc8  meminfo-1.0.5.tar.gz"
+sha512sums="c99d9a2f7b7e4cd90536420c466c976e5518a18987e119f7be636ad410acb2ce7d0d260875df9950ea9236fb77d0a64e79795c64c76929f4e03d3f4a99e80e42  meminfo-1.1.1.tar.gz"

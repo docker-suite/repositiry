@@ -1,7 +1,7 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=composer
-pkgver=2.1.8
+pkgver=2.1.9
 pkgrel=200
 
 pkgdesc="Dependency manager for PHP"
@@ -23,5 +23,5 @@ package() {
 }
 
 sha512sums="
-7ce39f49d53ced9037f15b8fe176ad53c4e58d0c688ef0cc99f90bc03dd42c506bcc4d65a0ce0075f72e6d11d51d91d1d85c5fdb9854467e983e25e9f00efbb2  composer-2.1.8.phar
+2639b0d4e88cfd212173cfc5d8cb402f8c30717c02cd78b3315c1663d7c35fae794ff44f577a6757048b6e87a4c92f1bc81da52ef164afbbac9c7573cd447515  composer-2.1.9.phar
 "

@@ -1,8 +1,8 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=libxlsxwriter
-pkgver=1.0.0
-pkgrel=0
+pkgver=1.1.4
+pkgrel=200
 
 pkgdesc="A C library for creating Excel XLSX files"
 url="https://github.com/jmcnamara/libxlsxwriter"
@@ -35,5 +35,5 @@ package() {
 }
 
 sha512sums="
-bad49a87dba97c965030274005cb19757ac5128c5d298b30344771beea8538214d06ca7122ec9a239267529ed1852f085611618aeb68fb884ed56543bf759698  libxlsxwriter-1.0.0.tar.gz
+fad36f7882fcb21b87e13cf603022cfad3f14e6f955a06e2771712facd0fe12f83f4d1655dc1a744724bda1ac83af7e7bf1393457c5507d8983f63002ab294b5  libxlsxwriter-1.1.4.tar.gz
 "

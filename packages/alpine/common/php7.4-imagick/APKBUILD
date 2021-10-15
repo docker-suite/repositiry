@@ -1,7 +1,7 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=php7.4-imagick
-pkgver=3.4.4
+pkgver=3.5.1
 pkgrel=0
 _pkgreal=imagick
 _phpver=7.4
@@ -74,5 +74,5 @@ package() {
 }
 
 sha512sums="
-73145a1f095849c32760db2dfc4acc13c57d99a037d65eca9b0ddf8f8e81cf6d28a50f2614e44bae1d90b4f881a2e9a64926e0e3b9403e491fd903ffeb30c4b7  imagick-3.4.4.tgz
+b922c4fad994a4bf26f4d92b6e81bb761bd8d4d1b52f4b7099cf944cdaed4e44d0318beccfb2cf3bee2605ce33b0ad764d9e3d2ba99c9a6f624ca569a4ac73ad  imagick-3.5.1.tgz
 "
