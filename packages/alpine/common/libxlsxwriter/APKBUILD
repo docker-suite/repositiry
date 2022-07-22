@@ -12,9 +12,11 @@ license="BSD-2-Clause-FreeBSD"
 depends="zlib"
 makedepends="file zlib-dev"
 source="$pkgname-$pkgver.tar.gz::https://github.com/jmcnamara/$pkgname/archive/RELEASE_$pkgver.tar.gz"
+
 srcdir="/tmp/$pkgname-$pkgver/src"
 pkgdir="/tmp/$pkgname-$pkgver/pkg"
 builddir="$srcdir/$pkgname-RELEASE_$pkgver"
+
 subpackages="$pkgname-dev"
 options="!check"
 

@@ -75,6 +75,4 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="
-afc9fa881f31f6ff5fd96e9c4e61a8be580d45bf2b39273fe8881dc9f0546cde2a565455e2c3f90afb89eb0cffa5e5591cef215b351c79d1328fc7fdf655a26f  xlswriter-1.5.0.tgz
-"
+sha512sums="afc9fa881f31f6ff5fd96e9c4e61a8be580d45bf2b39273fe8881dc9f0546cde2a565455e2c3f90afb89eb0cffa5e5591cef215b351c79d1328fc7fdf655a26f  xlswriter-1.5.0.tgz"

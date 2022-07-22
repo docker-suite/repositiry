@@ -73,6 +73,4 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="
-b922c4fad994a4bf26f4d92b6e81bb761bd8d4d1b52f4b7099cf944cdaed4e44d0318beccfb2cf3bee2605ce33b0ad764d9e3d2ba99c9a6f624ca569a4ac73ad  imagick-3.5.1.tgz
-"
+sha512sums="b922c4fad994a4bf26f4d92b6e81bb761bd8d4d1b52f4b7099cf944cdaed4e44d0318beccfb2cf3bee2605ce33b0ad764d9e3d2ba99c9a6f624ca569a4ac73ad  imagick-3.5.1.tgz"

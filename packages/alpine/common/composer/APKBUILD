@@ -1,7 +1,7 @@
 # Maintainer: Hexosse <hexosse@gmail.com>
 
 pkgname=composer
-pkgver=2.1.9
+pkgver=2.3.10
 pkgrel=200
 
 pkgdesc="Dependency manager for PHP"
@@ -12,9 +12,11 @@ license="MIT"
 depends=""
 makedepends=""
 source="$pkgname-$pkgver.phar::https://getcomposer.org/download/$pkgver/$pkgname.phar"
+
 srcdir="/tmp/$pkgname-$pkgver/src"
 pkgbasedir="/tmp/$pkgname-$pkgver/pkg"
 builddir="$srcdir/$pkgname-$pkgver"
+
 options="!check"
 install_if="php7.1-composer php7.2-composer php7.3-composer php7.4-composer"
 
@@ -22,6 +24,4 @@ package() {
     install -m 0755 -D "$srcdir"/$pkgname-$pkgver.phar "$pkgdir"/usr/bin/$pkgname
 }
 
-sha512sums="
-2639b0d4e88cfd212173cfc5d8cb402f8c30717c02cd78b3315c1663d7c35fae794ff44f577a6757048b6e87a4c92f1bc81da52ef164afbbac9c7573cd447515  composer-2.1.9.phar
-"
+sha512sums="6879dbc46bf08ffca7d7302633f48dd033b5f8f549b3c4473279cf482e29a21080d44f94bc9391936fa993df8a3d559484c067ecb8f9cf1ec56276d05a0a4d56  composer-2.3.10.phar"

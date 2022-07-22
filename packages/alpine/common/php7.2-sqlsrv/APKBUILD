@@ -74,6 +74,3 @@ package() {
     printf "; priority=20\nextension=$_pkgreal.so\n" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="
-31dc3eab62406669eb9c8895354d9a50a271eb0ab7dcb3e74d004bda65c4fe1be80d9f44f3da75556f967bce022590bbc43ac3c1d2830a2cd40601fbe653a5c1  sqlsrv-5.8.1.tgz
-"

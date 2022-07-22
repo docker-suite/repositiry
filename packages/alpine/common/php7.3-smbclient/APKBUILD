@@ -73,6 +73,4 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="
-381051dbe6347ce3b0be9d1ed44ee80be846ce1cd4255689127220a48e3c157853e98ae463435a12342f6370b4e96c162069d8d00574aaf88675c5b9ad0810e8  smbclient-1.0.6.tgz
-"
+sha512sums="381051dbe6347ce3b0be9d1ed44ee80be846ce1cd4255689127220a48e3c157853e98ae463435a12342f6370b4e96c162069d8d00574aaf88675c5b9ad0810e8  smbclient-1.0.6.tgz"

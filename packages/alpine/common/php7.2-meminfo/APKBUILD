@@ -74,6 +74,4 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="
-c99d9a2f7b7e4cd90536420c466c976e5518a18987e119f7be636ad410acb2ce7d0d260875df9950ea9236fb77d0a64e79795c64c76929f4e03d3f4a99e80e42  meminfo-1.1.1.tar.gz
-"
+sha512sums="c99d9a2f7b7e4cd90536420c466c976e5518a18987e119f7be636ad410acb2ce7d0d260875df9950ea9236fb77d0a64e79795c64c76929f4e03d3f4a99e80e42  meminfo-1.1.1.tar.gz"

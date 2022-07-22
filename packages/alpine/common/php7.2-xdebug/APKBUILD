@@ -74,6 +74,4 @@ package() {
 	echo "zend_extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="
-c14f13f770016a9fcaaa1fef0f9465521a9f52c17593477e57195c43cdafc3961f51708cfad4f98f0f8bfd84673a63b136c45bbf9d3150309b81d5f5c485db83  xdebug-3.0.2.tgz
-"
+sha512sums="c14f13f770016a9fcaaa1fef0f9465521a9f52c17593477e57195c43cdafc3961f51708cfad4f98f0f8bfd84673a63b136c45bbf9d3150309b81d5f5c485db83  xdebug-3.0.2.tgz"

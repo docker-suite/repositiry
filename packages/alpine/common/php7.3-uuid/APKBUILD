@@ -73,6 +73,4 @@ package() {
 	echo "extension=$_pkgreal.so" > "$pkgdir/$_config_dir"/03_$_pkgreal.ini
 }
 
-sha512sums="
-bd557823a8c2b78f74675a2554445eafc69193c6fe5af1f9435cdd90a8efdec0d3974ae8af759fe7d30b2f805876fc2ef55058dea245c9d89a792f634fdb0a10  uuid-1.2.0.tgz
-"
+sha512sums="bd557823a8c2b78f74675a2554445eafc69193c6fe5af1f9435cdd90a8efdec0d3974ae8af759fe7d30b2f805876fc2ef55058dea245c9d89a792f634fdb0a10  uuid-1.2.0.tgz"

@@ -3,17 +3,25 @@
 pkgname=enchant2
 pkgver=2.2.15
 pkgrel=1000
+
 pkgdesc="wrapper library for generic spell checking (v2)"
 url="https://abiword.github.io/enchant/"
 arch="all"
 license="LGPL-2.1-or-later"
-subpackages="$pkgname-dev $pkgname-doc"
+
+depends=""
 makedepends="aspell-dev glib-dev dbus-glib-dev gettext-dev file bash nuspell-dev"
-options="!check" # needs unpackaged unittest-cpp
 source="https://github.com/AbiWord/enchant/releases/download/v$pkgver/enchant-$pkgver.tar.gz"
+
+srcdir="/tmp/$pkgname-$pkgver/src"
+pkgbasedir="/tmp/$pkgname-$pkgver/pkg"
 builddir="$srcdir/enchant-$pkgver"
 
+subpackages="$pkgname-dev $pkgname-doc"
+options="!check" # needs unpackaged unittest-cpp
+
 build() {
+	cd "$builddir"
 	./configure \
 		--build=$CBUILD \
 		--host=$CHOST \
@@ -24,10 +32,12 @@ build() {
 }
 
 check() {
+	cd "$builddir"
 	make check
 }
 
 package() {
+	cd "$builddir"
 	make DESTDIR="$pkgdir" pkgdatadir=/usr/share/enchant-2 install
 }
 sha512sums="

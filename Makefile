@@ -2,7 +2,7 @@
 DIR:=$(strip $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST)))))
 
 ## Define the default version to package
-default = 3.14
+default = 3.16
 
 ##
 .DEFAULT_GOAL := help
@@ -26,22 +26,26 @@ run: ## Run a command in a the docker apk-builder container: make run v=[3.7|3.8
 		-v $(DIR)/public:/public \
 		-v $(DIR)/packages/alpine/common:/packages/common \
 		-v $(DIR)/packages/alpine/v$(version):/packages/$(version) \
-		-w /packages/$(version) \
+		-w "//packages/$(version)" \
 		dsuite/apk-builder-dev:$(version) $(c)
 
 package: ## Build a specific package: make package v=[3.7|3.8|3.9|3.10|3.11|3.12|3.13|3.14] p=[<package-name1> <package-name2>]
 	@# -- use default version if v is not specified
 	@$(eval version := $(or $(v),$(default)))
+	@# -- force package build if it exist
+	$(if $(f),$(eval force := "-f"))
 	@# -- make sure a package a specified
 	@test "$(p)"
 	@# -- run the package command
-	@$(MAKE) run v=$(version) c="package -p \"$(p)\""
+	@$(MAKE) run v=$(version) c="package -p \"$(p)\" $(force)"
 
 packages: ## Build all packages: make packages v=[3.7|3.8|3.9|3.10|3.11|3.12|3.13|3.14]
 	@# use default version if v is not specified
 	@$(eval version := $(or $(v),$(default)))
+	@# -- force package build if it exist
+	$(if $(f),$(eval force := "-f"))
 	@# Build all packages
-	@$(MAKE) run v=$(version) c=package
+	@$(MAKE) run v=$(version) c="package $(force)"
 
 dependency_create: ## Create a package dependency: make dependency v=[3.7|3.8|3.9|3.10|3.11|3.12|3.13|3.14]
 	@# -- use default version if v is not specified
@@ -63,6 +67,8 @@ dependencies_create:  ## Create all dependencies
 	@$(MAKE) dependency_create v=3.12
 	@$(MAKE) dependency_create v=3.13
 	@$(MAKE) dependency_create v=3.14
+	@$(MAKE) dependency_create v=3.15
+	@$(MAKE) dependency_create v=3.16
 
 dependency_remove: ## Remove dependencies
 	@# -- use default version if v is not specified
@@ -84,6 +90,8 @@ dependencies_remove: ## Remove dependencies
 	@$(MAKE) dependency_remove v=3.12
 	@$(MAKE) dependency_remove v=3.13
 	@$(MAKE) dependency_remove v=3.14
+	@$(MAKE) dependency_remove v=3.15
+	@$(MAKE) dependency_remove v=3.16
 
 deploy: ## Deploy built packages to repository
 	@# use default version if v is not specified
